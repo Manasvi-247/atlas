@@ -21,6 +21,7 @@ import {
   Tooltip,
 } from "recharts";
 import { Card, Statistic } from "antd";
+import { StreakCard } from "./Streak";
 import {
   Flame,
   Sparkles,
@@ -160,6 +161,9 @@ export function Dashboard({
         <Stat icon={Flame} label="Day streak" value={`${model.streak}`} color={TERRA} />
         <Stat icon={Sparkles} label="XP" value={`${model.xp}`} color={GOLD} />
       </div>
+
+      {/* Streak banner */}
+      <StreakCard />
 
       {/* Row: constellation + distribution donut */}
       <div className="grid lg:grid-cols-3 gap-6">

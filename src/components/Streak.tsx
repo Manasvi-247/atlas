@@ -1,16 +1,148 @@
 "use client";
 
 import React from "react";
-import { Popover, Progress, Tooltip } from "antd";
+import { Card, Popover, Progress, Tooltip } from "antd";
 import { Flame, Snowflake, Check, Trophy } from "lucide-react";
 import { cx } from "./ui";
 import { useAtlas } from "@/lib/store";
+import type { LearnerModel } from "@/lib/types";
 
 const DAY = 24 * 60 * 60 * 1000;
 const MILESTONES = [3, 7, 14, 30, 60, 100];
 
 function dayKey(t: number) {
   return new Date(t).toISOString().slice(0, 10);
+}
+
+/** Shared derivation so the popover and the dashboard card stay in sync. */
+function deriveStreak(model: LearnerModel, now = Date.now()) {
+  const streak = model.streak;
+  const longest = model.longestStreak ?? streak;
+  const studyDays = model.studyDays ?? [];
+  const tier = tierFor(streak);
+  const today = dayKey(now);
+  const studiedToday = model.lastStudyDay === today;
+  const atRisk = streak > 0 && !studiedToday;
+
+  const week = Array.from({ length: 7 }, (_, i) => {
+    const t = now - (6 - i) * DAY;
+    const key = dayKey(t);
+    return {
+      key,
+      label: new Date(t).toLocaleDateString(undefined, { weekday: "narrow" }),
+      studied: studyDays.includes(key),
+      isToday: key === today,
+    };
+  });
+
+  const nextMilestone = MILESTONES.find((m) => m > streak) ?? null;
+  const prevMilestone = [...MILESTONES].reverse().find((m) => m <= streak) ?? 0;
+  const toNext = nextMilestone ? nextMilestone - streak : 0;
+  const milestonePct = nextMilestone
+    ? Math.round(((streak - prevMilestone) / (nextMilestone - prevMilestone)) * 100)
+    : 100;
+
+  return { streak, longest, studyDays, tier, today, studiedToday, atRisk, week, nextMilestone, toNext, milestonePct };
+}
+
+function WeekDots({ week, color }: { week: ReturnType<typeof deriveStreak>["week"]; color: string }) {
+  return (
+    <div className="flex justify-between gap-1">
+      {week.map((d) => (
+        <div key={d.key} className="flex flex-col items-center gap-1">
+          <span className="text-[0.6rem] text-[var(--color-ink-faint)]">{d.label}</span>
+          <span
+            className={cx(
+              "w-7 h-7 rounded-full grid place-items-center text-xs",
+              d.studied ? "text-white" : "border border-dashed border-[var(--color-line-strong)] text-[var(--color-ink-faint)]",
+              d.isToday && "ring-2 ring-offset-1 ring-offset-[var(--color-card)]"
+            )}
+            style={{
+              background: d.studied ? color : "transparent",
+              ...(d.isToday ? { ["--tw-ring-color" as string]: color } : {}),
+            }}
+          >
+            {d.studied ? <Flame size={13} fill="#fff" /> : ""}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Horizontal streak banner for the dashboard. */
+export function StreakCard() {
+  const model = useAtlas((s) => s.model);
+  const s = deriveStreak(model);
+
+  return (
+    <Card className="!rounded-xl" styles={{ body: { padding: 20 } }}>
+      <div className="grid md:grid-cols-[auto_1fr_auto] gap-6 items-center">
+        {/* Flame + count */}
+        <div className="flex items-center gap-3">
+          <span
+            className={cx("grid place-items-center", s.streak > 0 && "flame-live")}
+            style={{ filter: s.streak > 0 ? `drop-shadow(0 0 8px ${s.tier.glow})` : "none" }}
+          >
+            <Flame size={40} fill={s.streak > 0 ? s.tier.color : "none"} color={s.tier.color} />
+          </span>
+          <div>
+            <div className="font-display text-3xl font-semibold leading-none">{s.streak}</div>
+            <div className="text-xs font-semibold uppercase tracking-wide mt-1" style={{ color: s.tier.color }}>
+              {s.tier.name}
+            </div>
+          </div>
+        </div>
+
+        {/* Week */}
+        <div className="md:border-x md:border-[var(--color-line)] md:px-6">
+          <div className="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-[var(--color-ink-faint)] mb-2">
+            This week
+          </div>
+          <WeekDots week={s.week} color={s.tier.color} />
+        </div>
+
+        {/* Milestone + status */}
+        <div className="min-w-[180px]">
+          {s.nextMilestone ? (
+            <>
+              <div className="flex items-center justify-between text-xs mb-1.5">
+                <span className="font-semibold">Next: {s.nextMilestone}-day badge</span>
+                <span className="text-[var(--color-ink-faint)]">{s.toNext} to go</span>
+              </div>
+              <Progress percent={s.milestonePct} showInfo={false} strokeColor={s.tier.color} trailColor="#e2d8c4" size="small" />
+            </>
+          ) : (
+            <div className="text-xs font-semibold inline-flex items-center gap-1.5 text-[var(--color-pine)]">
+              <Trophy size={14} /> Every badge earned.
+            </div>
+          )}
+          <div
+            className={cx(
+              "mt-2.5 text-xs font-medium px-2.5 py-1 rounded-md inline-flex items-center gap-1.5",
+              s.studiedToday
+                ? "bg-[color-mix(in_srgb,var(--color-pine)_14%,white)] text-[var(--color-pine-deep)]"
+                : "bg-[color-mix(in_srgb,var(--color-rose)_12%,white)] text-[var(--color-rose)]"
+            )}
+          >
+            {s.studiedToday ? (
+              <>
+                <Check size={13} /> Studied today
+              </>
+            ) : (
+              <>
+                <Snowflake size={13} /> {s.streak > 0 ? "Study today to keep it" : "Study today to start"}
+              </>
+            )}
+          </div>
+          <div className="mt-2 text-[0.7rem] text-[var(--color-ink-faint)]">
+            Longest <strong className="text-[var(--color-ink)]">{s.longest}</strong> · Active days{" "}
+            <strong className="text-[var(--color-ink)]">{s.studyDays.length}</strong>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
 }
 
 interface Tier {
