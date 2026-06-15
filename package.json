@@ -1,0 +1,33 @@
+{
+  "name": "atlas-learning",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Atlas — an adaptive, AI-tutored personalised learning path generator",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/nextjs-registry": "^1.3.0",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@anthropic-ai/sdk": "^0.69.0",
+    "antd": "^5.29.3",
+    "framer-motion": "^11.18.0",
+    "lucide-react": "^0.469.0",
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "recharts": "^2.15.4",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}
