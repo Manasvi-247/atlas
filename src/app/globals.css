@@ -31,6 +31,88 @@
   color-scheme: light;
 }
 
+/* ── Dark mode — toggled by `.dark` on <html>. Overrides the @theme tokens so
+   every var(--color-*) surface flips. ─────────────────────────────────────── */
+html.dark {
+  color-scheme: dark;
+  --color-paper: #0c0f24;
+  --color-paper-2: #10142f;
+  --color-card: #161a39;
+  --color-ink: #ecebfb;
+  --color-ink-soft: #a8a4cf;
+  --color-ink-faint: #7b779e;
+  --color-line: #29305a;
+  --color-line-strong: #3a4173;
+  --color-pine: #5ec9a7;
+  --color-pine-deep: #8fe3c8;
+  --color-terra: #e0915a;
+  --color-terra-soft: #f0b489;
+  --color-gold: #d8b86a;
+  --color-rose: #e8859a;
+}
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark body::before {
+  background-image: radial-gradient(rgba(180, 190, 255, 0.05) 1px, transparent 1px);
+}
+
+/* ── Theme toggle (Uiverse sun/moon switch), class-scoped for reuse ────────── */
+.theme-toggle {
+  font-size: 14px;
+  position: relative;
+  display: inline-block;
+  width: 6em;
+  cursor: pointer;
+  line-height: 0;
+}
+.theme-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.theme-toggle .tt-container,
+.theme-toggle .tt-patches,
+.theme-toggle .tt-stars,
+.theme-toggle .tt-button,
+.theme-toggle .tt-sun,
+.theme-toggle .tt-moon,
+.theme-toggle .tt-cloud {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.theme-toggle input:checked + svg .tt-container {
+  fill: #2b4360;
+}
+.theme-toggle input:checked + svg .tt-button {
+  transform: translate(28px, 2.333px);
+}
+.theme-toggle .tt-sun {
+  opacity: 1;
+}
+.theme-toggle input:checked + svg .tt-sun {
+  opacity: 0;
+}
+.theme-toggle .tt-moon {
+  opacity: 0;
+}
+.theme-toggle input:checked + svg .tt-moon {
+  opacity: 1;
+}
+.theme-toggle .tt-cloud {
+  opacity: 1;
+}
+.theme-toggle input:checked + svg .tt-cloud {
+  opacity: 0;
+}
+.theme-toggle .tt-stars {
+  opacity: 0;
+}
+.theme-toggle input:checked + svg .tt-stars {
+  opacity: 1;
+}
+
 html,
 body {
   background-color: var(--color-paper);

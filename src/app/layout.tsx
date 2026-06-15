@@ -39,6 +39,11 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${manrope.variable} ${mono.variable} antialiased`}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('atlas-theme');var d=s?s==='dark':(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
         <Providers>
           <div className="relative z-10">
             <Chrome>{children}</Chrome>

@@ -20,6 +20,7 @@ import { Logo, cx } from "./ui";
 import { useAtlas } from "@/lib/store";
 import { dueForReview } from "@/lib/sr";
 import { StreakBadge } from "./Streak";
+import { ThemeToggle } from "./ThemeToggle";
 
 const NAV = [
   { href: "/path", label: "Path", icon: Map },
@@ -144,6 +145,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Sparkles size={15} /> {model.xp}
           </span>
         </div>
+        <div className="flex items-center justify-between gap-2 pt-1">
+          <span className="text-xs text-[var(--color-ink-faint)]">Theme</span>
+          <ThemeToggle />
+        </div>
         {model.subject && (
           <button
             onClick={() => {
@@ -185,7 +190,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Menu size={22} />
           </button>
           <Logo size={22} />
-          <StreakBadge />
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <StreakBadge />
+          </div>
         </header>
 
         <main className="flex-1 px-5 sm:px-8 py-6 w-full max-w-6xl mx-auto">{children}</main>
