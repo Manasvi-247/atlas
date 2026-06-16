@@ -315,7 +315,7 @@ function PracticeWidget({ seg }: { seg: Extract<Segment, { type: "practice" }> }
               seg.options[picked!].correct ? "text-[var(--color-pine)]" : "text-[var(--color-rose)]"
             )}
           >
-            {seg.options[picked!].correct ? "Nice — that's right." : "Not quite — see the highlighted answer."}
+            {seg.options[picked!].correct ? "Nice - that's right." : "Not quite - see the highlighted answer."}
           </span>
         )}
       </div>

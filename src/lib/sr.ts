@@ -11,7 +11,7 @@ export function nextReview(concept: Concept, quality: number, now = Date.now()) 
   const prev = concept.srInterval || 1;
   let interval: number;
   if (quality < 0.5) {
-    interval = 1; // reset — needs to come back tomorrow
+    interval = 1; // reset - needs to come back tomorrow
   } else if (concept.srInterval <= 1) {
     interval = quality > 0.8 ? 3 : 2;
   } else {

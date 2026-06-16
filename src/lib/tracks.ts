@@ -19,7 +19,7 @@ export const FEATURED_TRACKS: FeaturedTrack[] = [
   },
 ];
 
-/** Suggestions shown under the custom-subject field. Anything works — these
+/** Suggestions shown under the custom-subject field. Anything works - these
  * just nudge the learner. The whole path is generated live by Claude. */
 export const SUBJECT_SUGGESTIONS = [
   "Machine Learning",

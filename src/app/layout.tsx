@@ -22,7 +22,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Atlas — your personal learning cartographer",
+  title: "Atlas - your personal learning cartographer",
   description:
     "Atlas charts a learning path that knows what you know, what you need next, and how you learn best. Adaptive assessment, AI-built curriculum, and a Socratic tutor.",
 };

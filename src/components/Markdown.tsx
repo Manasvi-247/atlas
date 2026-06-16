@@ -5,7 +5,7 @@ import React from "react";
 /**
  * A small, dependency-free Markdown renderer tuned for Atlas lessons and tutor
  * replies. Handles headings, fenced code, lists, blockquotes, bold, italic, and
- * inline code. Fenced ```practice blocks are left out here — the lesson view
+ * inline code. Fenced ```practice blocks are left out here - the lesson view
  * extracts those and renders interactive widgets instead.
  */
 

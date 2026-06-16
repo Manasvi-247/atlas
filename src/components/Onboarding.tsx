@@ -110,7 +110,7 @@ export function Onboarding({ onStart }: { onStart: () => void }) {
               <div>
                 <label className="text-sm font-semibold text-[var(--color-ink)]">
                   Your goal{" "}
-                  <span className="font-normal text-[var(--color-ink-faint)]">(optional — shapes the path)</span>
+                  <span className="font-normal text-[var(--color-ink-faint)]">(optional - shapes the path)</span>
                 </label>
                 <input
                   value={goal}

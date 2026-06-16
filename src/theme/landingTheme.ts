@@ -1,12 +1,12 @@
 /**
- * Atlas theme — extracted verbatim from the marketing landing page
+ * Atlas theme - extracted verbatim from the marketing landing page
  * ("Atlas (standalone).html"). Two complete palettes:
  *
- *   • light — "warm pastel cartography"  (:root in the landing page)
- *   • dark  — "blue / purple / green terrain"  (html.dark in the landing page)
+ *   • light - "warm pastel cartography"  (:root in the landing page)
+ *   • dark  - "blue / purple / green terrain"  (html.dark in the landing page)
  *
  * This file is the single source of truth for the brand palette. It is NOT yet
- * applied across the app — when we wire light/dark theming in, both the CSS
+ * applied across the app - when we wire light/dark theming in, both the CSS
  * (`themeCssVariables`) and the JS token objects (`lightTheme` / `darkTheme`)
  * below are ready to drop in (CSS custom properties, antd ConfigProvider, etc.).
  */

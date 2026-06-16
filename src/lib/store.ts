@@ -81,7 +81,7 @@ export function computeOrder(concepts: Record<string, Concept>, now = Date.now()
     if (weak) p += 100; // revisit weak areas first
     else if (due) p += 60; // spaced review
     else if (c.mastery < 0.8) p += 40; // new learning
-    else p += 5; // mastered & not due — let it ride at the back
+    else p += 5; // mastered & not due - let it ride at the back
     p -= c.difficulty * 0.5;
     p -= (baseIndex.get(c.id) ?? 0) * 0.01; // stable tiebreak
     return p;
@@ -302,7 +302,7 @@ export const useAtlas = create<AtlasState>()(
             if (!c) continue;
             const score = pc.total > 0 ? pc.correct / pc.total : 0;
             const updated: Concept = { ...c };
-            // Exponential moving average — recent performance weighs more.
+            // Exponential moving average - recent performance weighs more.
             updated.mastery = c.attempts === 0 ? score : c.mastery * 0.55 + score * 0.45;
             updated.attempts = c.attempts + 1;
             updated.lastSeen = now;
@@ -333,9 +333,9 @@ export const useAtlas = create<AtlasState>()(
             id: uid(),
             at: now,
             kind: "quiz",
-            label: `Quiz · “${lesson?.title ?? result.lessonId}” — ${pct}%`,
+            label: `Quiz · “${lesson?.title ?? result.lessonId}” - ${pct}%`,
             detail: weak
-              ? "Below mastery — Atlas moved this concept back up your path"
+              ? "Below mastery - Atlas moved this concept back up your path"
               : "Mastery updated · path reordered",
           };
           return { model, history: [ev, ...s.history] };

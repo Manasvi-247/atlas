@@ -111,7 +111,7 @@ export function Tutor({ focusConceptId }: { focusConceptId?: string | null }) {
         <div>
           <SectionLabel>Socratic tutor</SectionLabel>
           <p className="text-sm text-[var(--color-ink-soft)] mt-1.5">
-            It guides you to the answer with questions — it won&apos;t just tell you.
+            It guides you to the answer with questions - it won&apos;t just tell you.
           </p>
         </div>
         {concepts.length > 0 && (
@@ -146,7 +146,7 @@ export function Tutor({ focusConceptId }: { focusConceptId?: string | null }) {
                 </h3>
                 <p className="text-sm text-[var(--color-ink-soft)] mt-1 max-w-sm mx-auto">
                   Tell the tutor where you&apos;re stuck. It will ask the right next question to get you
-                  unstuck — the discovery stays yours.
+                  unstuck - the discovery stays yours.
                 </p>
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
                   {starters.map((s) => (
@@ -226,7 +226,7 @@ export function Tutor({ focusConceptId }: { focusConceptId?: string | null }) {
       </div>
 
       <p className="text-xs text-[var(--color-ink-faint)] mt-2 text-center inline-flex items-center justify-center gap-1.5">
-        <Sparkles size={11} /> The tutor withholds direct answers on purpose — push back, guess, reason aloud.
+        <Sparkles size={11} /> The tutor withholds direct answers on purpose - push back, guess, reason aloud.
       </p>
     </div>
   );

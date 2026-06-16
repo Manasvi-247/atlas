@@ -251,7 +251,7 @@ function StreakPanel() {
         >
           {studiedToday ? (
             <>
-              <Check size={13} /> Studied today — streak safe
+              <Check size={13} /> Studied today - streak safe
             </>
           ) : atRisk ? (
             <>

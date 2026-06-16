@@ -23,9 +23,9 @@ Learner's goal: ${body.goal}
 Diagnosis:
 - Overall level: ${Math.round((d.level ?? 0.4) * 100)}%
 - Summary: ${d.summary ?? ""}
-- Already knows: ${(d.known ?? []).join(", ") || "—"}
-- Frontier (start teaching here): ${(d.frontier ?? []).join(", ") || "—"}
-- Gaps (later): ${(d.gaps ?? []).join(", ") || "—"}
+- Already knows: ${(d.known ?? []).join(", ") || "-"}
+- Frontier (start teaching here): ${(d.frontier ?? []).join(", ") || "-"}
+- Gaps (later): ${(d.gaps ?? []).join(", ") || "-"}
 
 Design their personalised path. Begin at the frontier, mark already-known concepts knownAlready=true, and make every module rationale specific to this learner.`;
 

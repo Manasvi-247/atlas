@@ -172,7 +172,7 @@ export function Assessment({ onDone }: { onDone: () => void }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not build curriculum");
       if (!Array.isArray(data.concepts) || data.concepts.length === 0) {
-        throw new Error("The curriculum came back empty — please try again.");
+        throw new Error("The curriculum came back empty - please try again.");
       }
       buildCurriculum(data.concepts, data.modules ?? []);
       onDone();
@@ -194,7 +194,7 @@ export function Assessment({ onDone }: { onDone: () => void }) {
           </h2>
           <p className="text-[var(--color-ink-soft)] mt-2 max-w-sm mx-auto">
             {phase === "diagnosing"
-              ? "Atlas is analysing every answer — what you know, what's at your edge, and how you reason."
+              ? "Atlas is analysing every answer - what you know, what's at your edge, and how you reason."
               : "Sequencing concepts, ordering prerequisites, and tailoring each module to your goal."}
           </p>
         </div>
@@ -414,7 +414,7 @@ export function Assessment({ onDone }: { onDone: () => void }) {
                   ))}
                 </div>
                 <p className="text-[0.7rem] text-[var(--color-ink-faint)] mt-2 leading-snug">
-                  Atlas raises the bar when you&apos;re right and eases off when you miss — homing in on your edge.
+                  Atlas raises the bar when you&apos;re right and eases off when you miss - homing in on your edge.
                 </p>
               </div>
             </div>
@@ -509,7 +509,7 @@ function DiagnosisReveal({
             </Pill>
           ))
         ) : (
-          <span className="text-sm text-[var(--color-ink-faint)]">—</span>
+          <span className="text-sm text-[var(--color-ink-faint)]">-</span>
         )}
       </div>
     </div>
@@ -531,7 +531,7 @@ function DiagnosisReveal({
 
         <div className="mt-6 grid sm:grid-cols-3 gap-5">
           <Group title="You already know" items={d.known} tone="pine" />
-          <Group title="Your frontier — start here" items={d.frontier} tone="terra" />
+          <Group title="Your frontier - start here" items={d.frontier} tone="terra" />
           <Group title="Coming later" items={d.gaps} tone="neutral" />
         </div>
       </div>

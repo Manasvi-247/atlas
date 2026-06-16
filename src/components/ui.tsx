@@ -160,21 +160,22 @@ export function Spinner({ label }: { label?: string }) {
   );
 }
 
-export function Logo({ size = 26 }: { size?: number }) {
+export function Logo({ size = 36 }: { size?: number }) {
   return (
     <span className="inline-flex items-center gap-2.5">
-      <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden>
-        <circle cx="16" cy="16" r="14.5" stroke="var(--color-pine)" strokeWidth="1.5" />
-        <path
-          d="M9 20.5 L14 9 L18 18 L23 11.5"
-          stroke="var(--color-terra)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <circle cx="14" cy="9" r="1.9" fill="var(--color-pine)" />
-        <circle cx="23" cy="11.5" r="1.9" fill="var(--color-gold)" />
+      <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden>
+        <circle cx="50" cy="50" r="22" fill="none" stroke="var(--color-pine)" strokeWidth="5" />
+        <g stroke="var(--color-ink-faint)" strokeWidth="4" strokeLinecap="round">
+          <line x1="50" y1="16" x2="50" y2="24" />
+          <line x1="50" y1="76" x2="50" y2="84" />
+          <line x1="16" y1="50" x2="24" y2="50" />
+          <line x1="76" y1="50" x2="84" y2="50" />
+        </g>
+        <g className="compass-needle">
+          <path d="M50 31 L59 50 L50 45 Z" fill="var(--color-terra)" />
+          <path d="M50 69 L41 50 L50 55 Z" fill="var(--color-pine)" />
+        </g>
+        <circle cx="50" cy="50" r="5" fill="var(--color-ink)" />
       </svg>
       <span className="font-display text-[1.35rem] font-semibold tracking-tight">Atlas</span>
     </span>

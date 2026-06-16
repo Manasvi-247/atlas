@@ -356,8 +356,8 @@ function QuizResultView({
             </Pill>
             <span className="text-[var(--color-ink-soft)]">
               {over
-                ? "You felt surer than your answers showed — slow down on the tricky ones."
-                : "You knew more than you felt — trust your reasoning a bit more."}
+                ? "You felt surer than your answers showed - slow down on the tricky ones."
+                : "You knew more than you felt - trust your reasoning a bit more."}
             </span>
           </div>
         )}

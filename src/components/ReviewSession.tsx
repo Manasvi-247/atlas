@@ -85,7 +85,7 @@ export function ReviewSession({ onExit }: { onExit: () => void }) {
         </Pill>
         <h2 className="font-display text-2xl font-semibold">{concept.name}</h2>
         <p className="text-sm text-[var(--color-ink-faint)] mt-2">
-          Before revealing — can you explain this in your own words?
+          Before revealing - can you explain this in your own words?
         </p>
 
         {!revealed ? (

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     const label = MODALITY_LABELS[body.modality] ?? body.modality;
     const user = `Subject: ${body.subject}
 Learner's goal: ${body.goal}
-Concept: "${body.concept.name}" — ${body.concept.summary}
+Concept: "${body.concept.name}" - ${body.concept.summary}
 
 Re-explain this concept using this modality: ${label}. Keep it fresh and short.`;
 

@@ -21,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     sync();
   }, [sync]);
 
-  // Landing palette — light "warm pastel cartography", dark "terrain".
+  // Landing palette - light "warm pastel cartography", dark "terrain".
   const light = {
     colorBgBase: "#ffffff",
     colorBgContainer: "#ffffff",

@@ -28,9 +28,9 @@ export interface Concept {
   summary: string;
   /** Concept ids that should be mastered before this one. */
   prereqs: string[];
-  /** 0..1 — model's estimate of how well the learner knows this. */
+  /** 0..1 - model's estimate of how well the learner knows this. */
   mastery: number;
-  /** 0..1 — how confident the learner *feels* (for calibration analytics). */
+  /** 0..1 - how confident the learner *feels* (for calibration analytics). */
   confidence: number;
   /** Total quiz/practice attempts touching this concept. */
   attempts: number;
@@ -65,7 +65,7 @@ export interface Module {
 export interface Curriculum {
   modules: Module[];
   lessons: Record<string, Lesson>;
-  /** Ordered lesson ids — the adaptive "path". Reordered as the model updates. */
+  /** Ordered lesson ids - the adaptive "path". Reordered as the model updates. */
   order: string[];
 }
 
@@ -95,7 +95,7 @@ export interface Diagnosis {
   summary: string;
   /** Concepts the learner already knows (skip / light review). */
   known: string[];
-  /** Concepts at the frontier — the right place to start teaching. */
+  /** Concepts at the frontier - the right place to start teaching. */
   frontier: string[];
   /** Concepts clearly not yet known (future modules). */
   gaps: string[];

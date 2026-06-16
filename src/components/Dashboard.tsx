@@ -186,7 +186,7 @@ export function Dashboard({
         >
           <Constellation concepts={model.concepts} />
           <p className="text-xs text-[var(--color-ink-faint)] mt-2">
-            Nodes are concepts; lines are prerequisites. Colour shows mastery — the map fills in as you learn.
+            Nodes are concepts; lines are prerequisites. Colour shows mastery - the map fills in as you learn.
           </p>
         </AccentCard>
 
@@ -334,10 +334,10 @@ export function Dashboard({
               </div>
               <p className="text-sm text-[var(--color-ink-soft)] mt-2">
                 {Math.abs(calGap) < 0.1
-                  ? "Beautifully calibrated — your gut matches reality."
+                  ? "Beautifully calibrated - your gut matches reality."
                   : calGap > 0
-                  ? "You feel surer than you are — slow down on tricky steps."
-                  : "You sell yourself short — trust your reasoning more."}
+                  ? "You feel surer than you are - slow down on tricky steps."
+                  : "You sell yourself short - trust your reasoning more."}
               </p>
             </>
           )}
@@ -371,7 +371,7 @@ export function Dashboard({
               icon={Target}
               color={C.rose}
               title={`Strengthen: ${c.name}`}
-              detail={`Mastery ${Math.round(c.mastery * 100)}% — worth another pass`}
+              detail={`Mastery ${Math.round(c.mastery * 100)}% - worth another pass`}
               onClick={() => onOpenLesson(`lesson-${c.id}`)}
             />
           ))}

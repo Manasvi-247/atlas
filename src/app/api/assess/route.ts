@@ -40,7 +40,7 @@ ${
     ? body.history
         .map((h) => `- "${h.concept}" (difficulty ${h.difficulty}): ${h.correct ? "correct" : "wrong"}`)
         .join("\n")
-    : "(none yet — this is the first batch)"
+    : "(none yet - this is the first batch)"
 }
 
 Concepts already asked (do NOT repeat): ${body.askedConcepts.join(", ") || "none"}

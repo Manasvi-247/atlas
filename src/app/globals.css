@@ -2,10 +2,10 @@
 
 /* ── Atlas design tokens ──────────────────────────────────────────────────
    A warm "field notebook" palette: aged paper, ink, a pine accent and a
-   terracotta highlight. Deliberately editorial — no purple gradients, no
+   terracotta highlight. Deliberately editorial - no purple gradients, no
    default system fonts. */
 @theme inline {
-  /* Light — landing "warm pastel cartography" palette */
+  /* Light - landing "warm pastel cartography" palette */
   --color-paper: #fdf3ee;
   --color-paper-2: #f9e8ee;
   --color-card: #ffffff;
@@ -32,11 +32,11 @@
   color-scheme: light;
 }
 
-/* ── Dark mode — toggled by `.dark` on <html>. Overrides the @theme tokens so
+/* ── Dark mode - toggled by `.dark` on <html>. Overrides the @theme tokens so
    every var(--color-*) surface flips. ─────────────────────────────────────── */
 html.dark {
   color-scheme: dark;
-  /* Dark — landing page background ("blue/purple terrain") + teal/cyan accents */
+  /* Dark - landing page background ("blue/purple terrain") + teal/cyan accents */
   --color-paper: #0c0f24;
   --color-paper-2: #10142f;
   --color-card: #161a39;
@@ -231,6 +231,23 @@ html.dark .atlas-card {
 .flame-live {
   animation: flame-flicker 1.6s ease-in-out infinite;
   transform-origin: center bottom;
+}
+
+/* Slowly rotating compass needle (app logo only). */
+@keyframes compass-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.compass-needle {
+  animation: compass-spin 14s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .compass-needle {
+    animation: none;
+  }
 }
 
 @keyframes float-in {

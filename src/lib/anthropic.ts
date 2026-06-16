@@ -5,9 +5,9 @@ import Anthropic from "@anthropic-ai/sdk";
  * in process.env and is never shipped to the browser.
  *
  * Two call shapes are used across the app:
- *   • structured()  — forced tool-use so Claude returns schema-valid JSON. This
+ *   • structured()  - forced tool-use so Claude returns schema-valid JSON. This
  *                     is rock-solid across SDK versions and guarantees shape.
- *   • streamText()  — token streaming for lessons + the Socratic tutor, so the
+ *   • streamText()  - token streaming for lessons + the Socratic tutor, so the
  *                     UI feels alive (text appears as it's written).
  */
 

@@ -145,10 +145,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Sparkles size={15} /> {model.xp}
           </span>
         </div>
-        <div className="flex items-center justify-between gap-2 pt-1">
-          <span className="text-xs text-[var(--color-ink-faint)]">Theme</span>
-          <ThemeToggle />
-        </div>
         {model.subject && (
           <button
             onClick={() => {
@@ -195,6 +191,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <StreakBadge />
           </div>
         </header>
+
+        {/* Desktop top utility bar — theme toggle pinned top-right */}
+        <div className="hidden lg:flex items-center justify-end h-16 px-8 sticky top-0 z-20 border-b border-[var(--color-line)] bg-[color-mix(in_srgb,var(--color-paper)_80%,transparent)] backdrop-blur-md">
+          <ThemeToggle />
+        </div>
 
         <main className="flex-1 px-5 sm:px-8 py-6 w-full max-w-6xl mx-auto">{children}</main>
       </div>
