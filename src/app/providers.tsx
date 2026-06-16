@@ -54,7 +54,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         theme={{
           algorithm: dark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
           token: {
-            colorInfo: dark ? "#8b7cf6" : "#f56a9c",
+            colorInfo: dark ? "#38bdf8" : "#f56a9c",
             colorSuccess: dark ? "#5eead4" : "#41b07f",
             colorWarning: dark ? "#d8b86a" : "#d99a3c",
             colorError: dark ? "#f08fc0" : "#c0455f",

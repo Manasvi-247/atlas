@@ -34,7 +34,7 @@ export const LIGHT_PALETTE: Palette = {
 export const DARK_PALETTE: Palette = {
   pine: "#5eead4",
   pineDeep: "#34d8b4",
-  terra: "#8b7cf6",
+  terra: "#38bdf8",
   gold: "#d8b86a",
   rose: "#f08fc0",
   line: "#3a4173",

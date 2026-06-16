@@ -318,7 +318,7 @@ export function Assessment({ onDone }: { onDone: () => void }) {
                           >
                             {state === "correct" ? <Check size={14} /> : state === "wrong" ? <X size={14} /> : String.fromCharCode(65 + i)}
                           </span>
-                          <span className="text-[0.97rem]">{choice}</span>
+                          <span className="text-[0.97rem] text-[var(--color-ink)]">{choice}</span>
                         </button>
                       );
                     })}
@@ -450,7 +450,19 @@ export function Assessment({ onDone }: { onDone: () => void }) {
               )}
             </div>
 
-            <NotePad context="assessment" compact />
+            <NotePad
+              context={
+                current
+                  ? `${current.concept}: ${current.prompt
+                      .replace(/```[\s\S]*?```/g, "")
+                      .replace(/`/g, "")
+                      .replace(/\s+/g, " ")
+                      .trim()
+                      .slice(0, 90)}`
+                  : "Diagnostic"
+              }
+              compact
+            />
           </aside>
         </div>
       </div>

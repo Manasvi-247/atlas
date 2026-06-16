@@ -11,7 +11,7 @@ import Anthropic from "@anthropic-ai/sdk";
  *                     UI feels alive (text appears as it's written).
  */
 
-export const MODEL = process.env.ATLAS_MODEL || "claude-opus-4-8";
+export const MODEL = process.env.ATLAS_MODEL || "claude-sonnet-4-6";
 
 let _client: Anthropic | null = null;
 

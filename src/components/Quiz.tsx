@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Gauge, ArrowRight, ArrowLeft, RotateCcw, MessagesSquare, Map as MapIcon, Check, X, Star } from "lucide-react";
 import { Button, MasteryRing, Pill, SectionLabel, Spinner, cx } from "./ui";
 import { Markdown } from "./Markdown";
+import { NotePad } from "./NotePad";
 import { useAtlas } from "@/lib/store";
 import type { QuizQuestion, QuizResult } from "@/lib/types";
 
@@ -163,7 +164,7 @@ export function Quiz({
   if (!q) return null;
 
   return (
-    <div className="max-w-2xl mx-auto float-in">
+    <div className="max-w-2xl w-full mx-auto float-in min-h-[72vh] flex flex-col justify-center">
       <div className="flex items-center justify-between">
         <SectionLabel>Understanding check · {concept?.name}</SectionLabel>
         <span className="text-xs text-[var(--color-ink-faint)]">
@@ -240,7 +241,7 @@ export function Quiz({
                 >
                   {state === "correct" ? <Check size={14} /> : state === "wrong" ? <X size={14} /> : String.fromCharCode(65 + i)}
                 </span>
-                <span className="text-[0.97rem]">{choice}</span>
+                <span className="text-[0.97rem] text-[var(--color-ink)]">{choice}</span>
               </button>
             );
           })}
@@ -288,6 +289,18 @@ export function Quiz({
           )}
         </div>
       </motion.div>
+
+      <div className="mt-4">
+        <NotePad
+          compact
+          context={`${concept?.name ?? "Quiz"}: ${q.prompt
+            .replace(/```[\s\S]*?```/g, "")
+            .replace(/`/g, "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 90)}`}
+        />
+      </div>
     </div>
   );
 }
@@ -315,7 +328,7 @@ function QuizResultView({
   const under = result.confidenceGap < -0.18;
 
   return (
-    <div className="max-w-2xl mx-auto float-in">
+    <div className="max-w-2xl w-full mx-auto float-in min-h-[72vh] flex flex-col justify-center">
       <div className="atlas-card p-7 text-center">
         <div className="flex justify-center">
           <MasteryRing

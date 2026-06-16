@@ -77,7 +77,7 @@ export function StreakCard() {
 
   return (
     <Card className="!rounded-xl" styles={{ body: { padding: 20 } }}>
-      <div className="grid md:grid-cols-[auto_1fr_auto] gap-6 items-center">
+      <div className="grid md:grid-cols-[auto_1fr] gap-8 items-center">
         {/* Flame + count */}
         <div className="flex items-center gap-3">
           <span
@@ -94,16 +94,8 @@ export function StreakCard() {
           </div>
         </div>
 
-        {/* Week */}
-        <div className="md:border-x md:border-[var(--color-line)] md:px-6">
-          <div className="text-[0.66rem] font-bold uppercase tracking-[0.14em] text-[var(--color-ink-faint)] mb-2">
-            This week
-          </div>
-          <WeekDots week={s.week} color={s.tier.color} />
-        </div>
-
         {/* Milestone + status */}
-        <div className="min-w-[180px]">
+        <div className="md:border-l md:border-[var(--color-line)] md:pl-8">
           {s.nextMilestone ? (
             <>
               <div className="flex items-center justify-between text-xs mb-1.5">
@@ -226,10 +218,10 @@ function StreakPanel() {
     : 100;
 
   return (
-    <div>
+    <div className="rounded-lg overflow-hidden bg-[var(--color-card)] border border-[var(--color-line)]">
       {/* Header */}
       <div
-        className="px-4 py-4 rounded-t-lg"
+        className="px-4 py-4"
         style={{ background: `linear-gradient(135deg, ${tier.color}22, transparent)` }}
       >
         <div className="flex items-center gap-3">

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Card, Input, Button, Empty } from "antd";
-import { StickyNote, Plus, Trash2 } from "lucide-react";
+import { StickyNote, Plus, Trash2, Link as LinkIcon } from "lucide-react";
 import { cx } from "./ui";
 import { useAtlas } from "@/lib/store";
 
@@ -57,7 +57,15 @@ export function NotePad({ context, compact }: { context?: string; compact?: bool
         ) : (
           shown.map((n) => (
             <div key={n.id} className="atlas-inset px-3 py-2 group flex items-start gap-2">
-              <p className="text-sm flex-1 whitespace-pre-wrap">{n.text}</p>
+              <div className="flex-1 min-w-0">
+                {n.context && (
+                  <div className="flex items-start gap-1.5 text-[0.7rem] text-[var(--color-terra)] mb-1.5">
+                    <LinkIcon size={11} className="mt-[3px] shrink-0" />
+                    <span className="italic line-clamp-2 leading-snug">{n.context}</span>
+                  </div>
+                )}
+                <p className="text-sm whitespace-pre-wrap">{n.text}</p>
+              </div>
               <button
                 onClick={() => removeNote(n.id)}
                 className="text-[var(--color-ink-faint)] hover:text-[var(--color-rose)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0"

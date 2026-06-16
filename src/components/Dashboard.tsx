@@ -20,8 +20,7 @@ import {
   RadialBar,
   Tooltip,
 } from "recharts";
-import { Card, Statistic } from "antd";
-import { StreakCard } from "./Streak";
+import { Tooltip as AntTooltip } from "antd";
 import { usePalette, type Palette } from "@/lib/palette";
 import {
   Flame,
@@ -33,8 +32,14 @@ import {
   GraduationCap,
   Gauge,
   TrendingUp,
+  Info,
+  Map as MapIcon,
+  PieChart as PieIcon,
+  BarChart3,
+  Activity as ActivityIcon,
+  ListChecks,
 } from "lucide-react";
-import { Pill, SectionLabel } from "./ui";
+import { SectionLabel, cx } from "./ui";
 import { useAtlas } from "@/lib/store";
 import { dueForReview } from "@/lib/sr";
 import { MODALITY_LABELS } from "@/lib/types";
@@ -163,31 +168,31 @@ export function Dashboard({
         <Stat icon={Sparkles} label="XP" value={`${model.xp}`} color={C.gold} />
       </div>
 
-      {/* Streak banner */}
-      <StreakCard />
-
       {/* Row: constellation + distribution donut */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 atlas-card p-6">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <h2 className="font-display text-xl font-semibold">Knowledge map</h2>
+      <div className="grid lg:grid-cols-3 gap-6 pt-4">
+        <AccentCard
+          title="Knowledge map"
+          icon={MapIcon}
+          accent={C.pine}
+          className="lg:col-span-2"
+          headerRight={
             <div className="flex items-center gap-3 text-xs text-[var(--color-ink-faint)]">
               <Legend color={C.pine} label="mastered" />
               <Legend color={C.gold} label="solid" />
               <Legend color={C.terra} label="learning" />
               <Legend color={C.line} label="not started" />
             </div>
-          </div>
+          }
+        >
           <Constellation concepts={model.concepts} />
           <p className="text-xs text-[var(--color-ink-faint)] mt-2">
             Nodes are concepts; lines are prerequisites. Colour shows mastery — the map fills in as you learn.
           </p>
-        </div>
+        </AccentCard>
 
-        <div className="atlas-card p-6 flex flex-col">
-          <h2 className="font-display text-lg font-semibold mb-2">Mastery mix</h2>
-          <div className="relative flex-1 min-h-[200px]">
-            <ResponsiveContainer width="100%" height={210}>
+        <AccentCard title="Where you stand" icon={PieIcon} accent={C.terra}>
+          <div className="relative mx-auto w-full" style={{ height: 220 }}>
+            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={distData}
@@ -202,7 +207,7 @@ export function Dashboard({
                     <Cell key={i} fill={d.fill} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={tooltipStyle} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: C.ink }} itemStyle={{ color: C.ink }} />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 grid place-items-center pointer-events-none">
@@ -216,29 +221,33 @@ export function Dashboard({
             <Legend color={C.pine} label={`${mastered} mastered`} />
             <Legend color={C.terra} label={`${learning} learning`} />
           </div>
-        </div>
+        </AccentCard>
       </div>
 
       {/* Row: learning style radar + mastery-by-concept bars */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="atlas-card p-6">
-          <h2 className="font-display text-xl font-semibold">How you learn best</h2>
-          <p className="text-sm text-[var(--color-ink-faint)] mt-1">
-            Inferred from your assessment and the explanations you reach for. Lessons adapt to this.
-          </p>
+        <AccentCard
+          title="How you learn best"
+          icon={Sparkles}
+          accent={C.gold}
+          subtitle="Inferred from your assessment and the explanations you reach for. Lessons adapt to this."
+        >
           <ResponsiveContainer width="100%" height={260}>
             <RadarChart data={styleData} outerRadius="72%">
               <PolarGrid stroke={C.line} />
               <PolarAngleAxis dataKey="modality" tick={{ fontSize: 12, fill: C.inkSoft }} />
               <Radar dataKey="value" stroke={C.pine} fill={C.pine} fillOpacity={0.35} />
-              <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v}%`, "Weight"]} />
+              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: C.ink }} itemStyle={{ color: C.ink }} formatter={(v: number) => [`${v}%`, "Weight"]} />
             </RadarChart>
           </ResponsiveContainer>
-        </div>
+        </AccentCard>
 
-        <div className="atlas-card p-6">
-          <h2 className="font-display text-xl font-semibold">Mastery by concept</h2>
-          <p className="text-sm text-[var(--color-ink-faint)] mt-1">Top concepts on your path.</p>
+        <AccentCard
+          title="Mastery by concept"
+          icon={BarChart3}
+          accent={C.rose}
+          subtitle="Top concepts on your path."
+        >
           <ResponsiveContainer width="100%" height={Math.max(220, masteryBars.length * 28)}>
             <BarChart data={masteryBars} layout="vertical" margin={{ left: 8, right: 16 }}>
               <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: C.inkSoft }} unit="%" />
@@ -249,7 +258,7 @@ export function Dashboard({
                 tick={{ fontSize: 11, fill: C.inkSoft }}
                 interval={0}
               />
-              <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v}%`, "Mastery"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: C.ink }} itemStyle={{ color: C.ink }} formatter={(v: number) => [`${v}%`, "Mastery"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
               <Bar dataKey="mastery" radius={[0, 6, 6, 0]} barSize={14}>
                 {masteryBars.map((b, i) => (
                   <Cell key={i} fill={b.fill} />
@@ -257,14 +266,18 @@ export function Dashboard({
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </AccentCard>
       </div>
 
       {/* Row: activity area + calibration radial */}
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 atlas-card p-6">
-          <h2 className="font-display text-xl font-semibold">Activity</h2>
-          <p className="text-sm text-[var(--color-ink-faint)] mt-1">Sessions over the last two weeks.</p>
+        <AccentCard
+          title="Activity"
+          icon={ActivityIcon}
+          accent={C.terra}
+          subtitle="Sessions over the last two weeks."
+          className="lg:col-span-2"
+        >
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={activityData} margin={{ left: -18, right: 8, top: 8 }}>
               <defs>
@@ -275,17 +288,28 @@ export function Dashboard({
               </defs>
               <XAxis dataKey="day" tick={{ fontSize: 10, fill: C.inkSoft }} interval={1} />
               <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: C.inkSoft }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: C.ink }} itemStyle={{ color: C.ink }} />
               <Area type="monotone" dataKey="sessions" stroke={C.terra} strokeWidth={2} fill="url(#actGrad)" />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
+        </AccentCard>
 
-        <div className="atlas-card p-6">
-          <div className="flex items-center gap-2 mb-1">
-            <Gauge size={16} className="text-[var(--color-terra)]" />
-            <h2 className="font-display text-lg font-semibold">Calibration</h2>
-          </div>
+        <AccentCard
+          title="Calibration"
+          icon={Gauge}
+          accent={C.gold}
+          extra={
+            <AntTooltip
+              title="How well your felt confidence matches your actual accuracy. Each quiz answer carries a confidence rating; Atlas compares your average confidence against your real score. A big gap means you're over- or under-confident. Take a quiz to populate it."
+              placement="top"
+            >
+              <Info
+                size={14}
+                className="text-[var(--color-ink-faint)] hover:text-[var(--color-ink-soft)] cursor-help"
+              />
+            </AntTooltip>
+          }
+        >
           {cal.samples === 0 ? (
             <p className="text-sm text-[var(--color-ink-faint)] mt-2">
               Take a quiz to see how well your confidence matches your results.
@@ -301,7 +325,7 @@ export function Dashboard({
                   endAngle={-270}
                 >
                   <RadialBar background dataKey="value" cornerRadius={8} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v}%`]} />
+                  <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: C.ink }} itemStyle={{ color: C.ink }} formatter={(v: number) => [`${v}%`]} />
                 </RadialBarChart>
               </ResponsiveContainer>
               <div className="flex justify-center gap-4 text-xs -mt-2">
@@ -317,13 +341,12 @@ export function Dashboard({
               </p>
             </>
           )}
-        </div>
+        </AccentCard>
       </div>
 
       {/* Recommendations */}
-      <div className="atlas-card p-6">
-        <h2 className="font-display text-xl font-semibold">Recommended next steps</h2>
-        <div className="mt-4 grid md:grid-cols-2 gap-3">
+      <AccentCard title="Recommended next steps" icon={ListChecks} accent={C.pine}>
+        <div className="grid md:grid-cols-2 gap-3">
           {next && (
             <Rec
               icon={BookOpen}
@@ -356,12 +379,10 @@ export function Dashboard({
             <p className="text-sm text-[var(--color-ink-faint)]">You&apos;re all caught up. Beautiful work. 🌿</p>
           )}
         </div>
-      </div>
+      </AccentCard>
 
       {/* History */}
-      <div className="atlas-card p-6">
-        <h2 className="font-display text-xl font-semibold mb-1">Session history</h2>
-        <p className="text-sm text-[var(--color-ink-faint)] mb-4">Everything Atlas has tracked for you.</p>
+      <AccentCard title="Session history" icon={Clock} accent={C.terra} subtitle="Everything Atlas has tracked for you.">
         {history.length === 0 ? (
           <p className="text-sm text-[var(--color-ink-faint)]">No activity yet.</p>
         ) : (
@@ -374,7 +395,7 @@ export function Dashboard({
             </div>
           </div>
         )}
-      </div>
+      </AccentCard>
     </div>
   );
 }
@@ -388,29 +409,73 @@ function Legend({ color, label }: { color: string; label: string }) {
   );
 }
 
+/** A content card with an accent identity: colored icon chip + a faint
+ * corner glow in the accent hue, so the dashboard reads polychromatic. */
+function AccentCard({
+  title,
+  subtitle,
+  icon: Icon,
+  accent,
+  extra,
+  headerRight,
+  className,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  icon: React.ComponentType<{ size?: number }>;
+  accent: string;
+  extra?: React.ReactNode;
+  headerRight?: React.ReactNode;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cx("atlas-card relative overflow-hidden p-6", className)}>
+      <span aria-hidden className="absolute left-0 top-0 h-full w-[3px]" style={{ background: accent, opacity: 0.6 }} />
+      <div className="relative">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg"
+              style={{ background: `${accent}24`, color: accent }}
+            >
+              <Icon size={16} />
+            </span>
+            <h2 className="font-display text-lg font-semibold">{title}</h2>
+            {extra}
+          </div>
+          {headerRight}
+        </div>
+        {subtitle && <p className="mt-1 text-sm text-[var(--color-ink-faint)]">{subtitle}</p>}
+        <div className="mt-3">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 function Stat({
   icon: Icon,
   label,
   value,
   color,
 }: {
-  icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
+  icon: React.ComponentType<{ size?: number }>;
   label: string;
   value: string;
   color: string;
 }) {
   return (
-    <Card size="small" className="!rounded-xl">
-      <Statistic
-        title={
-          <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wide">
-            <Icon size={14} style={{ color }} /> {label}
-          </span>
-        }
-        value={value}
-        valueStyle={{ fontFamily: "var(--font-fraunces)", fontWeight: 600, color: "#211f1a" }}
-      />
-    </Card>
+    <div className="atlas-card p-4">
+      <span
+        className="grid h-9 w-9 place-items-center rounded-lg"
+        style={{ background: `${color}26`, color }}
+      >
+        <Icon size={18} />
+      </span>
+      <div className="relative mt-2.5 font-display text-2xl font-semibold text-[var(--color-ink)]">{value}</div>
+      <div className="relative text-xs uppercase tracking-wide text-[var(--color-ink-faint)]">{label}</div>
+    </div>
   );
 }
 
