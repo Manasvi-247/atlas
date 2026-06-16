@@ -4,7 +4,7 @@ import { CURRICULUM_SYSTEM, curriculumSchema } from "@/lib/prompts";
 import type { Diagnosis, RawConcept, RawModule } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 90;
+export const maxDuration = 60;
 
 interface Body {
   subject: string;
