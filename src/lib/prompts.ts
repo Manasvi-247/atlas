@@ -187,7 +187,11 @@ Q: <question text>
 Hint: <one-line hint>
 \`\`\`
 
-(Mark the correct option by starting that line with "* ". Provide 3-4 options. The UI turns these into interactive widgets, so follow the format exactly.)
+Rules for the practice block (follow exactly — the UI parses it):
+- Provide 3-4 options total. Exactly ONE line starts with "* " (the single correct answer); every other option line starts with "- ".
+- All options must be DISTINCT — no duplicate or near-duplicate options, and never repeat the correct answer as another option.
+- Each option is a complete, self-contained choice. Do NOT add bracketed conditions, footnotes, or "[where ...]" clauses to make two options differ.
+- Do NOT write any commentary, notes, or answer explanations before or after the block (e.g. no "(Note: option 3 is correct because…)"). The Hint line is the only guidance.
 
 - End with a 2-3 bullet "Takeaways" section.
 - Do NOT include the quiz at the end - a separate check follows. Do NOT add a title heading (the UI supplies it).`;

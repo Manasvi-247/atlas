@@ -34,9 +34,9 @@ export function Button({
   };
   const variants = {
     primary:
-      "bg-[var(--color-pine)] text-white hover:bg-[var(--color-pine-deep)] shadow-[0_10px_24px_-12px_rgba(44,90,79,0.7)]",
+      "bg-[var(--color-pine)] text-[var(--color-on-accent)] hover:bg-[var(--color-pine-deep)] shadow-[0_10px_24px_-12px_rgba(44,90,79,0.7)]",
     terra:
-      "bg-[var(--color-terra)] text-white hover:brightness-95 shadow-[0_10px_24px_-12px_rgba(184,107,58,0.7)]",
+      "bg-[var(--color-terra)] text-[var(--color-on-accent)] hover:brightness-95 shadow-[0_10px_24px_-12px_rgba(184,107,58,0.7)]",
     outline:
       "border border-[var(--color-line-strong)] text-[var(--color-ink)] hover:bg-[var(--color-paper-2)]",
     ghost: "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-2)]",

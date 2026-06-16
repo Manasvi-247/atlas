@@ -54,7 +54,7 @@ function WeekDots({ week, color }: { week: ReturnType<typeof deriveStreak>["week
           <span
             className={cx(
               "w-7 h-7 rounded-full grid place-items-center text-xs",
-              d.studied ? "text-white" : "border border-dashed border-[var(--color-line-strong)] text-[var(--color-ink-faint)]",
+              d.studied ? "text-[var(--color-on-accent)]" : "border border-dashed border-[var(--color-line-strong)] text-[var(--color-ink-faint)]",
               d.isToday && "ring-2 ring-offset-1 ring-offset-[var(--color-card)]"
             )}
             style={{
@@ -278,7 +278,7 @@ function StreakPanel() {
                 className={cx(
                   "w-7 h-7 rounded-full grid place-items-center text-xs",
                   d.studied
-                    ? "text-white"
+                    ? "text-[var(--color-on-accent)]"
                     : "border border-dashed border-[var(--color-line-strong)] text-[var(--color-ink-faint)]",
                   d.isToday && "ring-2 ring-offset-1 ring-offset-[var(--color-card)]"
                 )}
@@ -322,7 +322,7 @@ function StreakPanel() {
                 <span
                   className={cx(
                     "w-8 h-8 rounded-full grid place-items-center text-[0.6rem] font-bold transition-transform",
-                    earned ? "text-white scale-100" : "text-[var(--color-ink-faint)] opacity-50"
+                    earned ? "text-[var(--color-on-accent)] scale-100" : "text-[var(--color-ink-faint)] opacity-50"
                   )}
                   style={{
                     background: earned ? t.color : "var(--color-paper-2)",

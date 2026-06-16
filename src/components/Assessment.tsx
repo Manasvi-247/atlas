@@ -186,7 +186,7 @@ export function Assessment({ onDone }: { onDone: () => void }) {
     return (
       <div className="min-h-[65vh] grid place-items-center text-center px-6">
         <div className="float-in">
-          <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-white">
+          <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-[var(--color-on-accent)]">
             <Loader2 className="animate-spin" />
           </div>
           <h2 className="font-display text-2xl font-semibold mt-5">
@@ -311,8 +311,8 @@ export function Assessment({ onDone }: { onDone: () => void }) {
                           <span
                             className={cx(
                               "shrink-0 w-6 h-6 rounded-full grid place-items-center text-xs font-bold border",
-                              state === "correct" && "bg-[var(--color-pine)] text-white border-transparent",
-                              state === "wrong" && "bg-[var(--color-rose)] text-white border-transparent",
+                              state === "correct" && "bg-[var(--color-pine)] text-[var(--color-on-accent)] border-transparent",
+                              state === "wrong" && "bg-[var(--color-rose)] text-[var(--color-on-accent)] border-transparent",
                               (state === "idle" || state === "chosen") && "border-[var(--color-line-strong)]"
                             )}
                           >

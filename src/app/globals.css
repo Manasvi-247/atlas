@@ -30,6 +30,8 @@
 
 :root {
   color-scheme: light;
+  /* Text/icon colour that sits on top of an accent (pine/terra) fill. */
+  --color-on-accent: #ffffff;
 }
 
 /* ── Dark mode - toggled by `.dark` on <html>. Overrides the @theme tokens so
@@ -37,6 +39,7 @@
 html.dark {
   color-scheme: dark;
   /* Dark - landing page background ("blue/purple terrain") + teal/cyan accents */
+  --color-on-accent: #0b1020;
   --color-paper: #0c0f24;
   --color-paper-2: #10142f;
   --color-card: #161a39;

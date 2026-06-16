@@ -114,7 +114,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               className={cx(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors relative",
                 active
-                  ? "bg-[var(--color-pine)] text-white shadow-[0_8px_18px_-12px_rgba(44,90,79,0.8)]"
+                  ? "bg-[var(--color-pine)] text-[var(--color-on-accent)] shadow-[0_8px_18px_-12px_rgba(44,90,79,0.8)]"
                   : ready
                   ? "text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-ink)]"
                   : "text-[var(--color-ink-faint)] opacity-55 cursor-not-allowed"
@@ -128,7 +128,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <span
                   className={cx(
                     "ml-auto text-[0.66rem] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center",
-                    active ? "bg-white/25 text-white" : "bg-[var(--color-terra)] text-white"
+                    active ? "bg-white/25 text-[var(--color-on-accent)]" : "bg-[var(--color-terra)] text-[var(--color-on-accent)]"
                   )}
                 >
                   {badge}

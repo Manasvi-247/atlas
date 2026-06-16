@@ -95,7 +95,7 @@ export function FloatingTutor() {
             transition={{ type: "spring", stiffness: 400, damping: 22 }}
             onClick={() => setOpen(true)}
             title="Ask the Socratic tutor"
-            className="fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full grid place-items-center text-white shadow-[0_14px_30px_-10px_rgba(0,0,0,0.5)] bg-[var(--color-pine)] hover:scale-105 transition-transform"
+            className="fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full grid place-items-center text-[var(--color-on-accent)] shadow-[0_14px_30px_-10px_rgba(0,0,0,0.5)] bg-[var(--color-pine)] hover:scale-105 transition-transform"
           >
             <MessagesSquare size={24} />
           </motion.button>
@@ -113,7 +113,7 @@ export function FloatingTutor() {
             className="fixed bottom-6 right-6 z-40 w-[min(380px,calc(100vw-2rem))] h-[min(560px,calc(100vh-3rem))] flex flex-col atlas-card overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-line)] bg-[var(--color-pine)] text-white">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-line)] bg-[var(--color-pine)] text-[var(--color-on-accent)]">
               <div className="flex items-center gap-2">
                 <GraduationCap size={18} />
                 <div>
@@ -140,7 +140,7 @@ export function FloatingTutor() {
               {messages.length === 0 && (
                 <div className="h-full grid place-items-center text-center px-4">
                   <div>
-                    <div className="mx-auto w-11 h-11 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-white">
+                    <div className="mx-auto w-11 h-11 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-[var(--color-on-accent)]">
                       <GraduationCap size={20} />
                     </div>
                     <p className="text-sm text-[var(--color-ink-soft)] mt-3">
@@ -167,7 +167,7 @@ export function FloatingTutor() {
                     className={cx(
                       "max-w-[88%] rounded-2xl px-3.5 py-2",
                       m.role === "user"
-                        ? "bg-[var(--color-pine)] text-white rounded-br-md"
+                        ? "bg-[var(--color-pine)] text-[var(--color-on-accent)] rounded-br-md"
                         : "atlas-inset rounded-bl-md"
                     )}
                   >
@@ -211,7 +211,7 @@ export function FloatingTutor() {
               <button
                 type="submit"
                 disabled={!input.trim() || streaming}
-                className="h-9 w-9 shrink-0 grid place-items-center rounded-full bg-[var(--color-pine)] text-white disabled:opacity-40 transition-opacity"
+                className="h-9 w-9 shrink-0 grid place-items-center rounded-full bg-[var(--color-pine)] text-[var(--color-on-accent)] disabled:opacity-40 transition-opacity"
               >
                 <Send size={16} />
               </button>

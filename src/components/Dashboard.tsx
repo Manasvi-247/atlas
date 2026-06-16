@@ -39,7 +39,7 @@ import {
   Activity as ActivityIcon,
   ListChecks,
 } from "lucide-react";
-import { SectionLabel, cx } from "./ui";
+import { SectionLabel, cx, Button } from "./ui";
 import { useAtlas } from "@/lib/store";
 import { dueForReview } from "@/lib/sr";
 import { MODALITY_LABELS } from "@/lib/types";
@@ -86,7 +86,7 @@ export function Dashboard({
   onReview,
   onOpenLesson,
 }: {
-  onReview: () => void;
+  onReview: (all?: boolean) => void;
   onOpenLesson: (lessonId: string) => void;
 }) {
   const model = useAtlas((s) => s.model);
@@ -107,6 +107,16 @@ export function Dashboard({
     .filter((c) => c.attempts > 0 && c.mastery < 0.6)
     .sort((a, b) => a.mastery - b.mastery)
     .slice(0, 3);
+
+  // Spaced-review stats
+  const reviewsDone = history.filter((h) => h.kind === "review").length;
+  const learnedCount = concepts.filter((c) => c.mastery >= 0.6).length;
+  const scheduled = concepts
+    .filter((c) => c.mastery >= 0.6 && c.dueAt != null && (c.dueAt as number) > Date.now())
+    .map((c) => c.dueAt as number)
+    .sort((a, b) => a - b);
+  const upcoming = scheduled.length;
+  const nextDueAt = scheduled[0];
 
   const cal = model.calibration;
   const avgConf = cal.samples ? cal.sumConfidence / cal.samples : 0;
@@ -344,6 +354,46 @@ export function Dashboard({
         </AccentCard>
       </div>
 
+      {/* Spaced review */}
+      <AccentCard
+        title="Spaced review"
+        icon={RefreshCw}
+        accent={C.gold}
+        subtitle="Keep what you've learned from fading on the forgetting curve."
+      >
+        <div className="grid grid-cols-3 gap-3 text-center">
+          {[
+            { label: "Reviews done", value: reviewsDone, color: C.pine },
+            { label: "Due now", value: due.length, color: due.length ? C.gold : C.inkSoft },
+            { label: "Upcoming", value: upcoming, color: C.inkSoft },
+          ].map((s) => (
+            <div key={s.label} className="atlas-inset py-3">
+              <div className="font-display text-2xl font-semibold" style={{ color: s.color }}>
+                {s.value}
+              </div>
+              <div className="text-[0.66rem] uppercase tracking-wide text-[var(--color-ink-faint)]">{s.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
+          <span className="text-xs text-[var(--color-ink-faint)]">
+            {nextDueAt
+              ? `Next review ${new Date(nextDueAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+              : "No reviews scheduled yet"}
+          </span>
+          <div className="flex items-center gap-2">
+            {due.length > 0 && (
+              <Button size="sm" onClick={() => onReview(false)}>
+                <RefreshCw size={14} /> Review {due.length} due
+              </Button>
+            )}
+            <Button size="sm" variant={due.length > 0 ? "outline" : "primary"} disabled={learnedCount === 0} onClick={() => onReview(true)}>
+              Review now
+            </Button>
+          </div>
+        </div>
+      </AccentCard>
+
       {/* Recommendations */}
       <AccentCard title="Recommended next steps" icon={ListChecks} accent={C.pine}>
         <div className="grid md:grid-cols-2 gap-3">
@@ -497,7 +547,7 @@ function Rec({
       onClick={onClick}
       className="w-full text-left atlas-inset px-4 py-3 flex items-center gap-3 hover:border-[var(--color-line-strong)] transition-colors"
     >
-      <span className="w-9 h-9 rounded-xl grid place-items-center text-white shrink-0" style={{ background: color }}>
+      <span className="w-9 h-9 rounded-xl grid place-items-center text-[var(--color-on-accent)] shrink-0" style={{ background: color }}>
         <Icon size={16} />
       </span>
       <div className="min-w-0">

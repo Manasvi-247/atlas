@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw, ArrowLeft, Eye, Check } from "lucide-react";
 import { Button, Pill, SectionLabel } from "./ui";
@@ -15,27 +15,68 @@ const RATINGS: { label: string; quality: number; tone: string }[] = [
   { label: "Easy", quality: 1.0, tone: "var(--color-pine)" },
 ];
 
-export function ReviewSession({ onExit }: { onExit: () => void }) {
+export function ReviewSession({
+  onExit,
+  all = false,
+  onReviewAll,
+}: {
+  onExit: () => void;
+  all?: boolean;
+  onReviewAll?: () => void;
+}) {
   const model = useAtlas((s) => s.model);
   const recordReview = useAtlas((s) => s.recordReview);
+  const learnedCount = Object.values(model.concepts).filter((c) => c.mastery >= 0.6).length;
 
-  // Snapshot the due list once so completing items doesn't reshuffle mid-session.
-  const queue = useMemo(() => dueForReview(model.concepts).map((c) => c.id), []);
+  // Snapshot the queue once so completing items doesn't reshuffle mid-session.
+  // "all" = review every learned concept on demand; otherwise only what's due.
+  const queue = useMemo(() => {
+    if (all) {
+      return Object.values(model.concepts)
+        .filter((c) => c.mastery >= 0.6)
+        .sort((a, b) => a.mastery - b.mastery)
+        .map((c) => c.id);
+    }
+    return dueForReview(model.concepts).map((c) => c.id);
+    // Recompute when the mode changes (due <-> all); model intentionally excluded
+    // so completing items mid-session doesn't reshuffle the queue.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [all]);
   const [idx, setIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [done, setDone] = useState(0);
 
+  // Reset the session when switching modes (due <-> all).
+  useEffect(() => {
+    setIdx(0);
+    setRevealed(false);
+    setDone(0);
+  }, [all]);
+
   if (queue.length === 0) {
     return (
       <div className="max-w-xl mx-auto text-center py-16">
-        <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-white">
+        <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-[var(--color-on-accent)]">
           <Check size={22} />
         </div>
-        <h2 className="font-display text-2xl font-semibold mt-4">Nothing due right now</h2>
-        <p className="text-[var(--color-ink-soft)] mt-1">Atlas will surface reviews as concepts begin to fade.</p>
-        <Button className="mt-5" variant="outline" onClick={onExit}>
-          <ArrowLeft size={16} /> Back to path
-        </Button>
+        <h2 className="font-display text-2xl font-semibold mt-4">
+          {all ? "Nothing to review yet" : "Nothing due right now"}
+        </h2>
+        <p className="text-[var(--color-ink-soft)] mt-1">
+          {all
+            ? "Master a few concepts and they'll be reviewable here."
+            : "Atlas will surface reviews as concepts begin to fade."}
+        </p>
+        <div className="mt-5 flex items-center justify-center gap-3">
+          {!all && onReviewAll && learnedCount > 0 && (
+            <Button variant="terra" onClick={onReviewAll}>
+              <RefreshCw size={16} /> Review what I&apos;ve learned ({learnedCount})
+            </Button>
+          )}
+          <Button variant="outline" onClick={onExit}>
+            <ArrowLeft size={16} /> Back to path
+          </Button>
+        </div>
       </div>
     );
   }
@@ -43,7 +84,7 @@ export function ReviewSession({ onExit }: { onExit: () => void }) {
   if (idx >= queue.length) {
     return (
       <div className="max-w-xl mx-auto text-center py-16 float-in">
-        <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-white">
+        <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-[var(--color-on-accent)]">
           <RefreshCw size={22} />
         </div>
         <h2 className="font-display text-2xl font-semibold mt-4">Review complete</h2>
@@ -103,7 +144,7 @@ export function ReviewSession({ onExit }: { onExit: () => void }) {
                 <button
                   key={r.label}
                   onClick={() => rate(r.quality)}
-                  className="py-2.5 rounded-xl border border-[var(--color-line)] text-sm font-medium hover:text-white transition-colors"
+                  className="py-2.5 rounded-xl border border-[var(--color-line)] text-sm font-medium hover:text-[var(--color-on-accent)] transition-colors"
                   style={{ ["--hover" as string]: r.tone }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = r.tone)}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "")}

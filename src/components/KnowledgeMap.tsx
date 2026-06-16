@@ -37,7 +37,7 @@ export function KnowledgeMap({
   onReview,
 }: {
   onOpenLesson: (lessonId: string) => void;
-  onReview: () => void;
+  onReview: (all?: boolean) => void;
 }) {
   const model = useAtlas((s) => s.model);
   const nextLessonId = useAtlas((s) => s.nextLessonId);
@@ -50,6 +50,7 @@ export function KnowledgeMap({
 
   const all = Object.values(concepts);
   const mastered = all.filter((c) => c.mastery >= 0.8).length;
+  const learned = all.filter((c) => c.mastery >= 0.6).length;
   const total = all.length;
   const overall = total ? Math.round((all.reduce((a, c) => a + c.mastery, 0) / total) * 100) : 0;
 
@@ -119,9 +120,18 @@ export function KnowledgeMap({
                 {due.length ? "Refresh before they fade" : "Scheduled on a forgetting curve"}
               </div>
             </div>
-            <Button icon={<RefreshCw size={15} />} disabled={due.length === 0} onClick={onReview}>
-              Review
-            </Button>
+            <div className="flex flex-col items-end gap-1.5 shrink-0">
+              <Button icon={<RefreshCw size={15} />} disabled={due.length === 0} onClick={() => onReview(false)}>
+                Review
+              </Button>
+              <button
+                onClick={() => onReview(true)}
+                disabled={learned === 0}
+                className="text-xs text-[var(--color-pine)] hover:underline disabled:opacity-40 disabled:no-underline"
+              >
+                Review now →
+              </button>
+            </div>
           </div>
         </Card>
       </div>

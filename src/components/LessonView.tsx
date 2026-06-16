@@ -60,7 +60,21 @@ function parsePractice(body: string): Segment {
     else if (line.startsWith("- ")) options.push({ text: line.slice(2).trim(), correct: false });
     else if (line.startsWith("*")) options.push({ text: line.slice(1).trim(), correct: true });
   }
-  return { type: "practice", q, options, hint };
+  // Defensive: drop duplicate options (keep the first, preferring a correct one)
+  // and keep at most one correct answer, so a malformed block never shows the
+  // answer twice.
+  const deduped: PracticeOption[] = [];
+  const seen = new Set<string>();
+  let haveCorrect = false;
+  for (const o of options) {
+    const key = o.text.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    const correct = o.correct && !haveCorrect;
+    if (correct) haveCorrect = true;
+    deduped.push({ text: o.text, correct });
+  }
+  return { type: "practice", q, options: deduped, hint };
 }
 
 const MODALITIES: Modality[] = ["analogy", "visual", "code", "story", "formal"];

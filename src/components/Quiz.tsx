@@ -234,8 +234,8 @@ export function Quiz({
                 <span
                   className={cx(
                     "shrink-0 w-6 h-6 rounded-full grid place-items-center text-xs font-bold border",
-                    state === "correct" && "bg-[var(--color-pine)] text-white border-transparent",
-                    state === "wrong" && "bg-[var(--color-rose)] text-white border-transparent",
+                    state === "correct" && "bg-[var(--color-pine)] text-[var(--color-on-accent)] border-transparent",
+                    state === "wrong" && "bg-[var(--color-rose)] text-[var(--color-on-accent)] border-transparent",
                     (state === "idle" || state === "chosen") && "border-[var(--color-line-strong)]"
                   )}
                 >

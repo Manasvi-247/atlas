@@ -8,7 +8,7 @@ export default function PathPage() {
   return (
     <KnowledgeMap
       onOpenLesson={(id) => router.push(`/learn/${id}`)}
-      onReview={() => router.push("/review")}
+      onReview={(all) => router.push(all ? "/review?all=1" : "/review")}
     />
   );
 }

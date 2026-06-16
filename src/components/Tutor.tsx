@@ -138,7 +138,7 @@ export function Tutor({ focusConceptId }: { focusConceptId?: string | null }) {
           {messages.length === 0 && (
             <div className="h-full grid place-items-center text-center px-6">
               <div>
-                <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-white">
+                <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--color-pine)] grid place-items-center text-[var(--color-on-accent)]">
                   <GraduationCap size={22} />
                 </div>
                 <h3 className="font-display text-xl font-semibold mt-3">
@@ -174,7 +174,7 @@ export function Tutor({ focusConceptId }: { focusConceptId?: string | null }) {
                 className={cx(
                   "max-w-[85%] rounded-2xl px-4 py-2.5",
                   m.role === "user"
-                    ? "bg-[var(--color-pine)] text-white rounded-br-md"
+                    ? "bg-[var(--color-pine)] text-[var(--color-on-accent)] rounded-br-md"
                     : "atlas-inset rounded-bl-md"
                 )}
               >
