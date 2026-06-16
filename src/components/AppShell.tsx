@@ -21,6 +21,7 @@ import { useAtlas } from "@/lib/store";
 import { dueForReview } from "@/lib/sr";
 import { StreakBadge } from "./Streak";
 import { ThemeToggle } from "./ThemeToggle";
+import { FloatingTutor } from "./FloatingTutor";
 
 const NAV = [
   { href: "/path", label: "Path", icon: Map },
@@ -199,6 +200,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <main className="flex-1 px-5 sm:px-8 py-6 w-full max-w-6xl mx-auto">{children}</main>
       </div>
+
+      <FloatingTutor />
     </div>
   );
 }
