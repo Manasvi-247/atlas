@@ -78,7 +78,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const SidebarInner = (
     <div className="flex flex-col h-full">
       <button
-        onClick={() => router.push("/")}
+        onClick={() => router.push("/start")}
         className="px-5 h-16 flex items-center border-b border-[var(--color-line)] w-full text-left hover:bg-[var(--color-paper-2)] transition-colors"
       >
         <Logo />
@@ -151,7 +151,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClick={() => {
               if (confirm("Start over? This clears your path, progress, and notes.")) {
                 reset();
-                router.push("/");
+                router.push("/start");
               }
             }}
             className="w-full text-xs text-[var(--color-ink-faint)] hover:text-[var(--color-rose)] inline-flex items-center justify-center gap-1.5 py-1.5"

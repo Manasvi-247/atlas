@@ -3,8 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    // Serve the standalone marketing landing page at a clean /landing URL.
-    return [{ source: "/landing", destination: "/landing.html" }];
+    // The marketing landing page is the front door (root), and also reachable
+    // at /landing. The app itself lives under /start, /path, /learn, etc.
+    return [
+      { source: "/", destination: "/landing.html" },
+      { source: "/landing", destination: "/landing.html" },
+    ];
   },
 };
 

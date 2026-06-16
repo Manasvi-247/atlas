@@ -6,7 +6,7 @@ import { useAtlas } from "@/lib/store";
 import { Onboarding } from "@/components/Onboarding";
 import { Spinner } from "@/components/ui";
 
-export default function Home() {
+export default function Start() {
   const router = useRouter();
   const hydrated = useAtlas((s) => s.hydrated);
   const model = useAtlas((s) => s.model);

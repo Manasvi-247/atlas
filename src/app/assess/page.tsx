@@ -13,7 +13,7 @@ export default function AssessPage() {
 
   useEffect(() => {
     if (!hydrated) return;
-    if (!model.subject) router.replace("/");
+    if (!model.subject) router.replace("/start");
     else if (model.curriculum) router.replace("/path");
   }, [hydrated, model.subject, model.curriculum, router]);
 
