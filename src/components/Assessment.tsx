@@ -301,11 +301,11 @@ export function Assessment({ onDone }: { onDone: () => void }) {
                             state === "idle" &&
                               "border-[var(--color-line)] hover:border-[var(--color-line-strong)] bg-[var(--color-card)]",
                             state === "chosen" &&
-                              "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_8%,white)]",
+                              "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_8%,var(--color-card))]",
                             state === "correct" &&
-                              "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,white)]",
+                              "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))]",
                             state === "wrong" &&
-                              "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,white)]"
+                              "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,var(--color-card))]"
                           )}
                         >
                           <span
@@ -434,8 +434,8 @@ export function Assessment({ onDone }: { onDone: () => void }) {
                       className={cx(
                         "text-[0.7rem] font-medium px-2 py-1 rounded-full border inline-flex items-center gap-1",
                         a.correct
-                          ? "border-[color-mix(in_srgb,var(--color-pine)_30%,white)] text-[var(--color-pine-deep)] bg-[color-mix(in_srgb,var(--color-pine)_10%,white)]"
-                          : "border-[color-mix(in_srgb,var(--color-rose)_30%,white)] text-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_8%,white)]"
+                          ? "border-[color-mix(in_srgb,var(--color-pine)_30%,var(--color-card))] text-[var(--color-pine-deep)] bg-[color-mix(in_srgb,var(--color-pine)_10%,var(--color-card))]"
+                          : "border-[color-mix(in_srgb,var(--color-rose)_30%,var(--color-card))] text-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_8%,var(--color-card))]"
                       )}
                     >
                       {a.correct ? <Check size={10} /> : <X size={10} />} {a.concept}

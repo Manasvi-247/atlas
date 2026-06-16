@@ -65,10 +65,10 @@ export function Pill({
 }) {
   const tones = {
     neutral: "bg-[var(--color-paper-2)] text-[var(--color-ink-soft)] border-[var(--color-line)]",
-    pine: "bg-[color-mix(in_srgb,var(--color-pine)_14%,white)] text-[var(--color-pine-deep)] border-[color-mix(in_srgb,var(--color-pine)_30%,white)]",
-    terra: "bg-[color-mix(in_srgb,var(--color-terra)_14%,white)] text-[var(--color-terra)] border-[color-mix(in_srgb,var(--color-terra)_30%,white)]",
-    gold: "bg-[color-mix(in_srgb,var(--color-gold)_18%,white)] text-[#8a6d24] border-[color-mix(in_srgb,var(--color-gold)_34%,white)]",
-    rose: "bg-[color-mix(in_srgb,var(--color-rose)_14%,white)] text-[var(--color-rose)] border-[color-mix(in_srgb,var(--color-rose)_30%,white)]",
+    pine: "bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))] text-[var(--color-pine-deep)] border-[color-mix(in_srgb,var(--color-pine)_30%,var(--color-card))]",
+    terra: "bg-[color-mix(in_srgb,var(--color-terra)_14%,var(--color-card))] text-[var(--color-terra)] border-[color-mix(in_srgb,var(--color-terra)_30%,var(--color-card))]",
+    gold: "bg-[color-mix(in_srgb,var(--color-gold)_18%,var(--color-card))] text-[var(--color-gold)] border-[color-mix(in_srgb,var(--color-gold)_34%,var(--color-card))]",
+    rose: "bg-[color-mix(in_srgb,var(--color-rose)_14%,var(--color-card))] text-[var(--color-rose)] border-[color-mix(in_srgb,var(--color-rose)_30%,var(--color-card))]",
   };
   return (
     <span

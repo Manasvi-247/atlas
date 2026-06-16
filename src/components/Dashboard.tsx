@@ -22,6 +22,7 @@ import {
 } from "recharts";
 import { Card, Statistic } from "antd";
 import { StreakCard } from "./Streak";
+import { usePalette, type Palette } from "@/lib/palette";
 import {
   Flame,
   Sparkles,
@@ -39,28 +40,26 @@ import { dueForReview } from "@/lib/sr";
 import { MODALITY_LABELS } from "@/lib/types";
 import type { Concept, HistoryEvent, Modality } from "@/lib/types";
 
-const PINE = "#3D7A6B";
-const TERRA = "#B86B3A";
-const GOLD = "#C9A34E";
-const ROSE = "#B5556A";
-const LINE = "#cdbfa3";
 const DAY = 24 * 60 * 60 * 1000;
 
-function masteryColor(m: number): string {
-  if (m >= 0.8) return PINE;
-  if (m >= 0.6) return GOLD;
-  if (m > 0) return TERRA;
-  return LINE;
+function masteryColor(m: number, C: Palette): string {
+  if (m >= 0.8) return C.pine;
+  if (m >= 0.6) return C.gold;
+  if (m > 0) return C.terra;
+  return C.line;
 }
 
-const tooltipStyle = {
-  background: "#fbf8f1",
-  border: "1px solid #e2d8c4",
-  borderRadius: 10,
-  fontSize: 12,
-  fontFamily: "var(--font-sans)",
-  boxShadow: "0 10px 24px -16px rgba(60,50,30,.5)",
-};
+function makeTooltip(C: Palette) {
+  return {
+    background: C.card,
+    border: `1px solid ${C.line}`,
+    borderRadius: 10,
+    fontSize: 12,
+    fontFamily: "var(--font-sans)",
+    color: C.ink,
+    boxShadow: "0 10px 24px -16px rgba(0,0,0,.45)",
+  };
+}
 
 function computeDepths(concepts: Record<string, Concept>): Record<string, number> {
   const depth: Record<string, number> = {};
@@ -88,6 +87,8 @@ export function Dashboard({
   const model = useAtlas((s) => s.model);
   const history = useAtlas((s) => s.history);
   const nextLessonId = useAtlas((s) => s.nextLessonId);
+  const C = usePalette();
+  const tooltipStyle = makeTooltip(C);
 
   const concepts = Object.values(model.concepts);
   const total = concepts.length;
@@ -114,9 +115,9 @@ export function Dashboard({
   }));
 
   const distData = [
-    { name: "Mastered", value: mastered, fill: PINE },
-    { name: "Learning", value: learning, fill: TERRA },
-    { name: "Not started", value: notStarted, fill: LINE },
+    { name: "Mastered", value: mastered, fill: C.pine },
+    { name: "Learning", value: learning, fill: C.terra },
+    { name: "Not started", value: notStarted, fill: C.line },
   ].filter((d) => d.value > 0);
 
   const masteryBars = concepts
@@ -126,7 +127,7 @@ export function Dashboard({
     .map((c) => ({
       name: c.name.length > 16 ? c.name.slice(0, 15) + "…" : c.name,
       mastery: Math.round(c.mastery * 100),
-      fill: masteryColor(c.mastery),
+      fill: masteryColor(c.mastery, C),
     }));
 
   const activityData = useMemo(() => {
@@ -142,8 +143,8 @@ export function Dashboard({
   }, [history]);
 
   const calData = [
-    { name: "Accuracy", value: Math.round(avgScore * 100), fill: PINE },
-    { name: "Confidence", value: Math.round(avgConf * 100), fill: TERRA },
+    { name: "Accuracy", value: Math.round(avgScore * 100), fill: C.pine },
+    { name: "Confidence", value: Math.round(avgConf * 100), fill: C.terra },
   ];
 
   return (
@@ -156,10 +157,10 @@ export function Dashboard({
 
       {/* Stat tiles */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Stat icon={Target} label="Mastered" value={`${mastered}/${total}`} color={PINE} />
-        <Stat icon={Clock} label="Time invested" value={`${model.minutesSpent}m`} color={TERRA} />
-        <Stat icon={Flame} label="Day streak" value={`${model.streak}`} color={TERRA} />
-        <Stat icon={Sparkles} label="XP" value={`${model.xp}`} color={GOLD} />
+        <Stat icon={Target} label="Mastered" value={`${mastered}/${total}`} color={C.pine} />
+        <Stat icon={Clock} label="Time invested" value={`${model.minutesSpent}m`} color={C.terra} />
+        <Stat icon={Flame} label="Day streak" value={`${model.streak}`} color={C.terra} />
+        <Stat icon={Sparkles} label="XP" value={`${model.xp}`} color={C.gold} />
       </div>
 
       {/* Streak banner */}
@@ -171,10 +172,10 @@ export function Dashboard({
           <div className="flex items-center justify-between flex-wrap gap-2">
             <h2 className="font-display text-xl font-semibold">Knowledge map</h2>
             <div className="flex items-center gap-3 text-xs text-[var(--color-ink-faint)]">
-              <Legend color={PINE} label="mastered" />
-              <Legend color={GOLD} label="solid" />
-              <Legend color={TERRA} label="learning" />
-              <Legend color={LINE} label="not started" />
+              <Legend color={C.pine} label="mastered" />
+              <Legend color={C.gold} label="solid" />
+              <Legend color={C.terra} label="learning" />
+              <Legend color={C.line} label="not started" />
             </div>
           </div>
           <Constellation concepts={model.concepts} />
@@ -212,8 +213,8 @@ export function Dashboard({
             </div>
           </div>
           <div className="mt-2 flex justify-center gap-4 text-xs">
-            <Legend color={PINE} label={`${mastered} mastered`} />
-            <Legend color={TERRA} label={`${learning} learning`} />
+            <Legend color={C.pine} label={`${mastered} mastered`} />
+            <Legend color={C.terra} label={`${learning} learning`} />
           </div>
         </div>
       </div>
@@ -227,9 +228,9 @@ export function Dashboard({
           </p>
           <ResponsiveContainer width="100%" height={260}>
             <RadarChart data={styleData} outerRadius="72%">
-              <PolarGrid stroke={LINE} />
-              <PolarAngleAxis dataKey="modality" tick={{ fontSize: 12, fill: "#5a554a" }} />
-              <Radar dataKey="value" stroke={PINE} fill={PINE} fillOpacity={0.35} />
+              <PolarGrid stroke={C.line} />
+              <PolarAngleAxis dataKey="modality" tick={{ fontSize: 12, fill: C.inkSoft }} />
+              <Radar dataKey="value" stroke={C.pine} fill={C.pine} fillOpacity={0.35} />
               <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v}%`, "Weight"]} />
             </RadarChart>
           </ResponsiveContainer>
@@ -240,12 +241,12 @@ export function Dashboard({
           <p className="text-sm text-[var(--color-ink-faint)] mt-1">Top concepts on your path.</p>
           <ResponsiveContainer width="100%" height={Math.max(220, masteryBars.length * 28)}>
             <BarChart data={masteryBars} layout="vertical" margin={{ left: 8, right: 16 }}>
-              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: "#8c8576" }} unit="%" />
+              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: C.inkSoft }} unit="%" />
               <YAxis
                 type="category"
                 dataKey="name"
                 width={120}
-                tick={{ fontSize: 11, fill: "#5a554a" }}
+                tick={{ fontSize: 11, fill: C.inkSoft }}
                 interval={0}
               />
               <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v}%`, "Mastery"]} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
@@ -268,14 +269,14 @@ export function Dashboard({
             <AreaChart data={activityData} margin={{ left: -18, right: 8, top: 8 }}>
               <defs>
                 <linearGradient id="actGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={TERRA} stopOpacity={0.4} />
-                  <stop offset="100%" stopColor={TERRA} stopOpacity={0.02} />
+                  <stop offset="0%" stopColor={C.terra} stopOpacity={0.4} />
+                  <stop offset="100%" stopColor={C.terra} stopOpacity={0.02} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="day" tick={{ fontSize: 10, fill: "#8c8576" }} interval={1} />
-              <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: "#8c8576" }} />
+              <XAxis dataKey="day" tick={{ fontSize: 10, fill: C.inkSoft }} interval={1} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: C.inkSoft }} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Area type="monotone" dataKey="sessions" stroke={TERRA} strokeWidth={2} fill="url(#actGrad)" />
+              <Area type="monotone" dataKey="sessions" stroke={C.terra} strokeWidth={2} fill="url(#actGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -304,8 +305,8 @@ export function Dashboard({
                 </RadialBarChart>
               </ResponsiveContainer>
               <div className="flex justify-center gap-4 text-xs -mt-2">
-                <Legend color={PINE} label={`accuracy ${Math.round(avgScore * 100)}%`} />
-                <Legend color={TERRA} label={`confidence ${Math.round(avgConf * 100)}%`} />
+                <Legend color={C.pine} label={`accuracy ${Math.round(avgScore * 100)}%`} />
+                <Legend color={C.terra} label={`confidence ${Math.round(avgConf * 100)}%`} />
               </div>
               <p className="text-sm text-[var(--color-ink-soft)] mt-2">
                 {Math.abs(calGap) < 0.1
@@ -326,7 +327,7 @@ export function Dashboard({
           {next && (
             <Rec
               icon={BookOpen}
-              color={TERRA}
+              color={C.terra}
               title={`Continue: ${model.curriculum?.lessons[next]?.title}`}
               detail="Your next concept on the path"
               onClick={() => onOpenLesson(next)}
@@ -335,7 +336,7 @@ export function Dashboard({
           {due.length > 0 && (
             <Rec
               icon={RefreshCw}
-              color={GOLD}
+              color={C.gold}
               title={`Review ${due.length} concept${due.length > 1 ? "s" : ""}`}
               detail="Due on your forgetting curve"
               onClick={onReview}
@@ -345,7 +346,7 @@ export function Dashboard({
             <Rec
               key={c.id}
               icon={Target}
-              color={ROSE}
+              color={C.rose}
               title={`Strengthen: ${c.name}`}
               detail={`Mastery ${Math.round(c.mastery * 100)}% — worth another pass`}
               onClick={() => onOpenLesson(`lesson-${c.id}`)}
@@ -472,6 +473,7 @@ function TimelineRow({ ev }: { ev: HistoryEvent }) {
 }
 
 function Constellation({ concepts }: { concepts: Record<string, Concept> }) {
+  const C = usePalette();
   const { nodes, edges, width, height } = useMemo(() => {
     const ids = Object.keys(concepts);
     const depths = computeDepths(concepts);
@@ -521,14 +523,14 @@ function Constellation({ concepts }: { concepts: Record<string, Concept> }) {
             y1={e.y1}
             x2={e.x2}
             y2={e.y2}
-            stroke={e.strong ? PINE : LINE}
+            stroke={e.strong ? C.pine : C.line}
             strokeWidth={e.strong ? 1.6 : 1}
             strokeOpacity={e.strong ? 0.5 : 0.35}
           />
         ))}
         {nodes.map((n) => (
           <g key={n.id}>
-            <circle cx={n.x} cy={n.y} r={11} fill={masteryColor(n.c.mastery)} stroke="var(--color-card)" strokeWidth={2.5} />
+            <circle cx={n.x} cy={n.y} r={11} fill={masteryColor(n.c.mastery, C)} stroke="var(--color-card)" strokeWidth={2.5} />
             <text
               x={n.x}
               y={n.y + 26}

@@ -21,17 +21,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
     sync();
   }, [sync]);
 
+  // Landing palette — light "warm pastel cartography", dark "terrain".
   const light = {
-    colorBgBase: "#FBF8F1",
-    colorBgContainer: "#FBF8F1",
-    colorBgLayout: "#F6F1E7",
-    colorBgElevated: "#FBF8F1",
-    colorText: "#211F1A",
-    colorTextSecondary: "#5A554A",
-    colorTextTertiary: "#8C8576",
-    colorBorder: "#E2D8C4",
-    colorBorderSecondary: "#EFE7D6",
-    colorPrimary: "#3D7A6B",
+    colorBgBase: "#ffffff",
+    colorBgContainer: "#ffffff",
+    colorBgLayout: "#fdf3ee",
+    colorBgElevated: "#ffffff",
+    colorText: "#2c2440",
+    colorTextSecondary: "#6c6383",
+    colorTextTertiary: "#9a93ab",
+    colorBorder: "#ecd9e0",
+    colorBorderSecondary: "#f9e8ee",
+    colorPrimary: "#41b07f",
   };
   const darkTokens = {
     colorBgBase: "#161a39",
@@ -40,10 +41,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     colorBgElevated: "#1c2247",
     colorText: "#ecebfb",
     colorTextSecondary: "#a8a4cf",
-    colorTextTertiary: "#7b779e",
+    colorTextTertiary: "#6f6b92",
     colorBorder: "#29305a",
     colorBorderSecondary: "#29305a",
-    colorPrimary: "#5ec9a7",
+    colorPrimary: "#5eead4",
   };
   const modeTokens = dark ? darkTokens : light;
 
@@ -53,10 +54,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         theme={{
           algorithm: dark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
           token: {
-            colorInfo: modeTokens.colorPrimary,
-            colorSuccess: dark ? "#5ec9a7" : "#3D7A6B",
-            colorWarning: dark ? "#d8b86a" : "#C9A34E",
-            colorError: dark ? "#e8859a" : "#B5556A",
+            colorInfo: dark ? "#8b7cf6" : "#f56a9c",
+            colorSuccess: dark ? "#5eead4" : "#41b07f",
+            colorWarning: dark ? "#d8b86a" : "#d99a3c",
+            colorError: dark ? "#f08fc0" : "#c0455f",
             ...modeTokens,
             borderRadius: 10,
             borderRadiusLG: 12,

@@ -221,7 +221,7 @@ export function LessonView({
                 className={cx(
                   "text-xs px-3 py-1.5 rounded-full border transition-colors",
                   activeModality === mo
-                    ? "border-[var(--color-terra)] bg-[color-mix(in_srgb,var(--color-terra)_12%,white)] text-[var(--color-terra)]"
+                    ? "border-[var(--color-terra)] bg-[color-mix(in_srgb,var(--color-terra)_12%,var(--color-card))] text-[var(--color-terra)]"
                     : "border-[var(--color-line)] text-[var(--color-ink-soft)] hover:border-[var(--color-line-strong)]"
                 )}
               >
@@ -267,7 +267,7 @@ function PracticeWidget({ seg }: { seg: Extract<Segment, { type: "practice" }> }
   const answered = picked !== null;
 
   return (
-    <div className="my-5 rounded-2xl border border-[color-mix(in_srgb,var(--color-terra)_30%,white)] bg-[color-mix(in_srgb,var(--color-terra)_6%,white)] p-4">
+    <div className="my-5 rounded-2xl border border-[color-mix(in_srgb,var(--color-terra)_30%,var(--color-card))] bg-[color-mix(in_srgb,var(--color-terra)_6%,var(--color-card))] p-4">
       <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[var(--color-terra)] mb-2">
         <Lightbulb size={13} /> Quick check
       </div>
@@ -278,8 +278,8 @@ function PracticeWidget({ seg }: { seg: Extract<Segment, { type: "practice" }> }
         {seg.options.map((o, i) => {
           const isPicked = picked === i;
           let cls = "border-[var(--color-line)] bg-[var(--color-card)] hover:border-[var(--color-line-strong)]";
-          if (answered && o.correct) cls = "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,white)]";
-          else if (answered && isPicked && !o.correct) cls = "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,white)]";
+          if (answered && o.correct) cls = "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))]";
+          else if (answered && isPicked && !o.correct) cls = "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,var(--color-card))]";
           return (
             <button
               key={i}

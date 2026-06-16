@@ -141,7 +141,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="px-4 py-4 border-t border-[var(--color-line)] space-y-3">
         <div className="flex items-center justify-between text-sm">
           <StreakBadge />
-          <span className="inline-flex items-center gap-1.5 font-semibold text-[#8a6d24]" title="XP">
+          <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--color-gold)]" title="XP">
             <Sparkles size={15} /> {model.xp}
           </span>
         </div>

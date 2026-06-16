@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Gauge, ArrowRight, ArrowLeft, RotateCcw, MessagesSquare, Map as MapIcon, Check, X } from "lucide-react";
+import { Gauge, ArrowRight, ArrowLeft, RotateCcw, MessagesSquare, Map as MapIcon, Check, X, Star } from "lucide-react";
 import { Button, MasteryRing, Pill, SectionLabel, Spinner, cx } from "./ui";
 import { Markdown } from "./Markdown";
 import { useAtlas } from "@/lib/store";
@@ -25,6 +25,8 @@ export function Quiz({
 }) {
   const model = useAtlas((s) => s.model);
   const recordQuiz = useAtlas((s) => s.recordQuiz);
+  const toggleStar = useAtlas((s) => s.toggleStar);
+  const starred = useAtlas((s) => s.starred);
 
   const lesson = model.curriculum?.lessons[lessonId];
   const concept = lesson ? model.concepts[lesson.conceptId] : undefined;
@@ -175,8 +177,35 @@ export function Quiz({
         animate={{ opacity: 1, x: 0 }}
         className="atlas-card p-6 mt-4"
       >
-        <div className="lesson-prose text-[1.05rem]">
-          <Markdown text={q.prompt} />
+        <div className="flex items-start justify-between gap-3">
+          <div className="lesson-prose text-[1.05rem] flex-1">
+            <Markdown text={q.prompt} />
+          </div>
+          {(() => {
+            const starId = `${lessonId}:${q.id}`;
+            const isStarred = starred.some((x) => x.id === starId);
+            return (
+              <button
+                onClick={() =>
+                  toggleStar({
+                    id: starId,
+                    prompt: q.prompt,
+                    concept: concept?.name ?? "",
+                    kind: "quiz",
+                  })
+                }
+                title={isStarred ? "Unstar" : "Star this question for later"}
+                className={cx(
+                  "shrink-0 mt-0.5 transition-colors",
+                  isStarred
+                    ? "text-[var(--color-gold)]"
+                    : "text-[var(--color-ink-faint)] hover:text-[var(--color-gold)]"
+                )}
+              >
+                <Star size={20} fill={isStarred ? "var(--color-gold)" : "none"} />
+              </button>
+            );
+          })()}
         </div>
 
         <div className="mt-4 space-y-2.5">
@@ -196,9 +225,9 @@ export function Quiz({
                 className={cx(
                   "w-full text-left px-4 py-3 rounded-xl border transition-all flex items-center gap-3",
                   state === "idle" && "border-[var(--color-line)] hover:border-[var(--color-line-strong)] bg-[var(--color-card)]",
-                  state === "chosen" && "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_8%,white)]",
-                  state === "correct" && "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,white)]",
-                  state === "wrong" && "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,white)]"
+                  state === "chosen" && "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_8%,var(--color-card))]",
+                  state === "correct" && "border-[var(--color-pine)] bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))]",
+                  state === "wrong" && "border-[var(--color-rose)] bg-[color-mix(in_srgb,var(--color-rose)_10%,var(--color-card))]"
                 )}
               >
                 <span

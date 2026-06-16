@@ -6,13 +6,9 @@ import { Card, Steps, Tag, Progress, Button, Empty, Tooltip } from "antd";
 import { Play, RefreshCw, Flag, Clock, BookOpen } from "lucide-react";
 import { SectionLabel, cx } from "./ui";
 import { useAtlas } from "@/lib/store";
+import { usePalette, type Palette } from "@/lib/palette";
 import { conceptStatus, prereqsMet, dueForReview } from "@/lib/sr";
 import type { Concept, ConceptStatus } from "@/lib/types";
-
-const PINE = "#3D7A6B";
-const TERRA = "#B86B3A";
-const GOLD = "#C9A34E";
-const ROSE = "#B5556A";
 
 const STATUS_TAG: Record<ConceptStatus, { label: string; color: string }> = {
   locked: { label: "Locked", color: "default" },
@@ -29,11 +25,11 @@ function stepStatus(c: Concept): "finish" | "process" | "wait" | "error" {
   return "wait";
 }
 
-function barColor(c: Concept): string {
-  if (c.mastery >= 0.8) return PINE;
-  if (c.mastery >= 0.6) return GOLD;
-  if (c.mastery > 0) return TERRA;
-  return "#cdbfa3";
+function barColor(c: Concept, C: Palette): string {
+  if (c.mastery >= 0.8) return C.pine;
+  if (c.mastery >= 0.6) return C.gold;
+  if (c.mastery > 0) return C.terra;
+  return C.line;
 }
 
 export function KnowledgeMap({
@@ -45,6 +41,7 @@ export function KnowledgeMap({
 }) {
   const model = useAtlas((s) => s.model);
   const nextLessonId = useAtlas((s) => s.nextLessonId);
+  const C = usePalette();
   const next = nextLessonId();
   const due = dueForReview(model.concepts);
 
@@ -74,8 +71,8 @@ export function KnowledgeMap({
                 type="circle"
                 percent={overall}
                 size={64}
-                strokeColor={PINE}
-                trailColor="#e2d8c4"
+                strokeColor={C.pine}
+                trailColor={C.line}
                 format={(p) => <span className="text-sm font-semibold">{p}%</span>}
               />
               <div>
@@ -169,8 +166,8 @@ export function KnowledgeMap({
                     <Progress
                       percent={Math.round(c.mastery * 100)}
                       size={[120, 5]}
-                      strokeColor={barColor(c)}
-                      trailColor="#e2d8c4"
+                      strokeColor={barColor(c, C)}
+                      trailColor={C.line}
                       className="!m-0"
                     />
                   ) : (

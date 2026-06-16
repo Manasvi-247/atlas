@@ -110,7 +110,7 @@ export function StreakCard() {
                 <span className="font-semibold">Next: {s.nextMilestone}-day badge</span>
                 <span className="text-[var(--color-ink-faint)]">{s.toNext} to go</span>
               </div>
-              <Progress percent={s.milestonePct} showInfo={false} strokeColor={s.tier.color} trailColor="#e2d8c4" size="small" />
+              <Progress percent={s.milestonePct} showInfo={false} strokeColor={s.tier.color} trailColor="var(--color-line)" size="small" />
             </>
           ) : (
             <div className="text-xs font-semibold inline-flex items-center gap-1.5 text-[var(--color-pine)]">
@@ -121,8 +121,8 @@ export function StreakCard() {
             className={cx(
               "mt-2.5 text-xs font-medium px-2.5 py-1 rounded-md inline-flex items-center gap-1.5",
               s.studiedToday
-                ? "bg-[color-mix(in_srgb,var(--color-pine)_14%,white)] text-[var(--color-pine-deep)]"
-                : "bg-[color-mix(in_srgb,var(--color-rose)_12%,white)] text-[var(--color-rose)]"
+                ? "bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))] text-[var(--color-pine-deep)]"
+                : "bg-[color-mix(in_srgb,var(--color-rose)_12%,var(--color-card))] text-[var(--color-rose)]"
             )}
           >
             {s.studiedToday ? (
@@ -253,8 +253,8 @@ function StreakPanel() {
           className={cx(
             "mt-3 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5",
             studiedToday
-              ? "bg-[color-mix(in_srgb,var(--color-pine)_14%,white)] text-[var(--color-pine-deep)]"
-              : "bg-[color-mix(in_srgb,var(--color-rose)_12%,white)] text-[var(--color-rose)]"
+              ? "bg-[color-mix(in_srgb,var(--color-pine)_14%,var(--color-card))] text-[var(--color-pine-deep)]"
+              : "bg-[color-mix(in_srgb,var(--color-rose)_12%,var(--color-card))] text-[var(--color-rose)]"
           )}
         >
           {studiedToday ? (
@@ -310,7 +310,7 @@ function StreakPanel() {
               <span className="font-semibold">Next badge: {nextMilestone}-day</span>
               <span className="text-[var(--color-ink-faint)]">{toNext} to go</span>
             </div>
-            <Progress percent={milestonePct} showInfo={false} strokeColor={tier.color} trailColor="#e2d8c4" size="small" />
+            <Progress percent={milestonePct} showInfo={false} strokeColor={tier.color} trailColor="var(--color-line)" size="small" />
           </>
         ) : (
           <div className="text-xs font-semibold inline-flex items-center gap-1.5 text-[var(--color-pine)]">
