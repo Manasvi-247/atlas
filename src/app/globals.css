@@ -5,20 +5,21 @@
    terracotta highlight. Deliberately editorial — no purple gradients, no
    default system fonts. */
 @theme inline {
-  --color-paper: #f6f1e7;
-  --color-paper-2: #efe7d6;
-  --color-card: #fbf8f1;
-  --color-ink: #211f1a;
-  --color-ink-soft: #5a554a;
-  --color-ink-faint: #8c8576;
-  --color-line: #e2d8c4;
-  --color-line-strong: #cdbfa3;
-  --color-pine: #3d7a6b;
-  --color-pine-deep: #2c5a4f;
-  --color-terra: #b86b3a;
-  --color-terra-soft: #d89a6a;
-  --color-gold: #c9a34e;
-  --color-rose: #b5556a;
+  /* Light — landing "warm pastel cartography" palette */
+  --color-paper: #fdf3ee;
+  --color-paper-2: #f9e8ee;
+  --color-card: #ffffff;
+  --color-ink: #2c2440;
+  --color-ink-soft: #6c6383;
+  --color-ink-faint: #9a93ab;
+  --color-line: #ecd9e0;
+  --color-line-strong: #ddc3cd;
+  --color-pine: #41b07f;
+  --color-pine-deep: #2f9b6f;
+  --color-terra: #f56a9c;
+  --color-terra-soft: #f7a8c4;
+  --color-gold: #d99a3c;
+  --color-rose: #c0455f;
 
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
@@ -35,20 +36,21 @@
    every var(--color-*) surface flips. ─────────────────────────────────────── */
 html.dark {
   color-scheme: dark;
+  /* Dark — landing "blue / purple / green terrain" palette */
   --color-paper: #0c0f24;
   --color-paper-2: #10142f;
   --color-card: #161a39;
   --color-ink: #ecebfb;
   --color-ink-soft: #a8a4cf;
-  --color-ink-faint: #7b779e;
+  --color-ink-faint: #6f6b92;
   --color-line: #29305a;
   --color-line-strong: #3a4173;
-  --color-pine: #5ec9a7;
-  --color-pine-deep: #8fe3c8;
-  --color-terra: #e0915a;
-  --color-terra-soft: #f0b489;
+  --color-pine: #5eead4;
+  --color-pine-deep: #34d8b4;
+  --color-terra: #8b7cf6;
+  --color-terra-soft: #b79cf0;
   --color-gold: #d8b86a;
-  --color-rose: #e8859a;
+  --color-rose: #f08fc0;
 }
 
 html {
@@ -160,7 +162,7 @@ body::before {
 
 /* A hand-drawn "map" underline used on key headings. */
 .map-underline {
-  background-image: linear-gradient(transparent 60%, rgba(184, 107, 58, 0.28) 0);
+  background-image: linear-gradient(transparent 60%, rgba(245, 106, 156, 0.3) 0);
   background-size: 100% 100%;
 }
 
@@ -174,7 +176,7 @@ body::before {
 }
 
 .atlas-inset {
-  background: color-mix(in srgb, var(--color-paper-2) 70%, white);
+  background: color-mix(in srgb, var(--color-paper-2) 60%, var(--color-card));
   border: 1px solid var(--color-line);
   border-radius: 0.55rem;
 }
