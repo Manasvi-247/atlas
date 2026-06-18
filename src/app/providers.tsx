@@ -4,7 +4,9 @@ import "@ant-design/v5-patch-for-react-19";
 import React, { useEffect } from "react";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, theme as antdTheme } from "antd";
+import { SessionProvider } from "next-auth/react";
 import { useTheme } from "@/lib/useTheme";
+import { StateSync } from "@/components/StateSync";
 
 /**
  * Ant Design, themed to the Atlas "field-notebook" palette so antd components
@@ -49,7 +51,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const modeTokens = dark ? darkTokens : light;
 
   return (
+    <SessionProvider>
     <AntdRegistry>
+      <StateSync />
       <ConfigProvider
         theme={{
           algorithm: dark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
@@ -82,5 +86,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         {children}
       </ConfigProvider>
     </AntdRegistry>
+    </SessionProvider>
   );
 }

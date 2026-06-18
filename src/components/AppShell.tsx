@@ -15,8 +15,10 @@ import {
   X,
   Lock,
   Compass,
+  LogOut,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 import { Logo, cx } from "./ui";
 import { useAtlas } from "@/lib/store";
 import { dueForReview } from "@/lib/sr";
@@ -44,8 +46,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const reset = useAtlas((s) => s.reset);
   const nextLessonId = useAtlas((s) => s.nextLessonId);
   const due = dueForReview(model.concepts);
+  const { data: session } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
+
+  // The sign-in screen renders bare (no app sidebar).
+  if (pathname === "/signin") return <>{children}</>;
 
   const ready = hydrated && !!model.curriculum;
   const inAssessment = hydrated && !!model.subject && !model.curriculum;
@@ -130,6 +137,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       <div className="px-4 py-4 border-t border-[var(--color-line)] space-y-3">
+        {session?.user && (
+          <div className="flex items-center gap-2.5">
+            {session.user.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={session.user.image} alt="" className="w-8 h-8 rounded-full shrink-0" />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[var(--color-pine)] text-[var(--color-on-accent)] grid place-items-center text-xs font-semibold shrink-0">
+                {(session.user.name ?? "?").slice(0, 1).toUpperCase()}
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium text-[var(--color-ink)] truncate">
+                {session.user.name ?? "Learner"}
+              </div>
+              <div className="text-xs text-[var(--color-ink-faint)] truncate">{session.user.email}</div>
+            </div>
+            <button
+              onClick={() => setShowSignOutModal(true)}
+              title="Sign out"
+              className="text-[var(--color-ink-faint)] hover:text-[var(--color-rose)] transition-colors p-1 shrink-0"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        )}
         <div className="flex items-center justify-between text-sm">
           <StreakBadge />
           <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--color-gold)]" title="XP">
@@ -200,6 +232,59 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className="px-4 py-2 rounded-xl text-sm font-semibold bg-[var(--color-rose)] dark:bg-[var(--color-pine)] text-white dark:text-[var(--color-on-accent)] hover:opacity-90 transition-opacity shadow-[0_4px_14px_-6px_rgba(192,69,95,0.5)] dark:shadow-[0_4px_14px_-6px_rgba(94,234,212,0.4)]"
                 >
                   Yes, reset everything
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Sign-out confirmation modal ── */}
+      <AnimatePresence>
+        {showSignOutModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/40"
+            onClick={() => setShowSignOutModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 16 }}
+              transition={{ type: "spring", stiffness: 340, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="atlas-card w-full max-w-sm p-7 relative"
+            >
+              <button
+                onClick={() => setShowSignOutModal(false)}
+                className="absolute top-4 right-4 text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] transition-colors"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="w-12 h-12 rounded-2xl bg-[color-mix(in_srgb,var(--color-pine)_12%,var(--color-card))] grid place-items-center mb-5">
+                <LogOut size={22} className="text-[var(--color-pine)]" />
+              </div>
+
+              <h2 className="font-display text-xl font-semibold text-[var(--color-ink)]">Sign out?</h2>
+              <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
+                Your progress is saved to your account, so it'll be here when you sign back in.
+              </p>
+
+              <div className="mt-6 flex items-center gap-3 justify-end">
+                <button
+                  onClick={() => setShowSignOutModal(false)}
+                  className="px-4 py-2 rounded-xl text-sm font-medium border border-[var(--color-line)] text-[var(--color-ink-soft)] hover:border-[var(--color-line-strong)] hover:text-[var(--color-ink)] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-[var(--color-pine)] text-[var(--color-on-accent)] hover:opacity-90 transition-opacity"
+                >
+                  Sign out
                 </button>
               </div>
             </motion.div>

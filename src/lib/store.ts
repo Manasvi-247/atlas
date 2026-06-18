@@ -1,7 +1,6 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import type {
   Concept,
   CourseEntry,
@@ -158,8 +157,7 @@ function bumpStreak(model: LearnerModel, now = Date.now()) {
 }
 
 export const useAtlas = create<AtlasState>()(
-  persist(
-    (set, get) => ({
+  (set, get) => ({
       hydrated: false,
       courses: {},
       activeCourseId: null,
@@ -505,12 +503,5 @@ export const useAtlas = create<AtlasState>()(
           const next = remaining[0];
           return { courses: updatedCourses, activeCourseId: next.id, model: next.model, history: next.history };
         }),
-    }),
-    {
-      name: "atlas-learner-v1",
-      onRehydrateStorage: () => (state) => {
-        state?.setHydrated();
-      },
-    }
-  )
+    })
 );
