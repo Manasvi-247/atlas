@@ -1,4 +1,4 @@
-# 🧭 Atlas — Personalised Learning Path Generator
+# 🧭 Atlas — Personalized Learning Path Generator
 
 > AI tutoring that knows **what you know**, **what you need to learn next**, and **how you learn best**.
 
