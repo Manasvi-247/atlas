@@ -1,119 +1,196 @@
-# 🧭 Atlas — Personalized Learning Path Generator
+<div align="center">
 
-> AI tutoring that knows **what you know**, **what you need to learn next**, and **how you learn best**.
+<br/>
 
-Atlas is an adaptive learning platform built for Assignment 4 (EdTech AI). It runs a
-diagnostic that finds the exact boundary of a learner's knowledge, charts a personal
-curriculum from that diagnosis, teaches each concept in the learner's preferred style,
-adapts the path after every quiz, and provides a Socratic tutor that guides without
-giving the answer away.
+# 🧭 &nbsp; A T L A S
 
-It is **domain-agnostic** — Python and Algebra are polished featured tracks, but a
-learner can type *any* subject ("Music Theory", "Machine Learning", "Spanish grammar")
-and the entire path is generated live by Claude.
+### *Learning that knows the way.*
 
----
+An adaptive, AI‑tutored learning‑path generator that finds the edge of what you know,
+draws a route made only for you, and redraws it after every step.
 
-## ✨ What's inside
+<br/>
 
-### The six core features
-| Feature | Where | What it does |
-|---|---|---|
-| **Knowledge Assessment** | `Assessment.tsx`, `/api/assess` + `/api/diagnose` | Adaptive intake quiz. Difficulty climbs/eases per answer to narrow to the knowledge boundary. Ends in a precise diagnosis (known / frontier / gaps). |
-| **Curriculum Generation** | `/api/curriculum`, `store.buildCurriculum` | Builds a prerequisite-ordered concept **graph** + modules from the diagnosis, starting at the learner's frontier. Two learners get demonstrably different paths. |
-| **Interactive Lessons** | `LessonView.tsx`, `/api/lesson` | Streaming AI lessons with explanations, analogies, code, and **inline practice questions** rendered as interactive widgets. |
-| **Adaptive Progress** | `store.ts` (`recordQuiz`, `computeOrder`) | Mastery is updated per concept (EMA); the path is **re-ordered** after every quiz — weak concepts float up, mastered ones drop, prerequisites stay valid. |
-| **Socratic Tutor** | `Tutor.tsx`, `/api/tutor` | A chat tutor that guides toward answers with one question at a time and **refuses to state the answer outright**, even when asked directly. |
-| **Progress Dashboard** | `Dashboard.tsx` | Knowledge-graph constellation, mastery rings, time/streak/XP, session history timeline, and recommended next steps. |
+![Next.js](https://img.shields.io/badge/Next.js_15-000?logo=next.js&logoColor=white&style=flat-square)
+![React](https://img.shields.io/badge/React_19-149ECA?logo=react&logoColor=white&style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)
+![Tailwind](https://img.shields.io/badge/Tailwind_v4-38BDF8?logo=tailwindcss&logoColor=white&style=flat-square)
+![Claude](https://img.shields.io/badge/Claude_Sonnet_4.6-D97757?logo=anthropic&logoColor=white&style=flat-square)
 
-### The cutting-edge extras
-- **Confidence calibration** — every quiz answer carries a confidence rating; Atlas tracks whether you're over/under-confident and tells you.
-- **Learning-style adaptation** — a 5-modality style profile (analogy / visual / code / story / formal) is inferred from your assessment and from which "explain it differently" buttons you reach for; lessons are tuned to it.
-- **"Explain it differently"** — re-teach any concept through a different modality, live.
-- **Spaced repetition** — mastered concepts re-surface on an SM-2 forgetting curve in a dedicated **Review** mode.
-- **Knowledge constellation** — a layered-DAG visualisation of the concept graph that fills with colour as you master concepts.
-- **Persistent learner model** — everything is saved to `localStorage`, so progress survives reloads.
+</div>
 
 ---
 
-## 🚀 Run it
+## The idea
 
-> **Prerequisites:** Node 18+ and an Anthropic API key.
+Most courses teach everyone the same thing in the same order. Atlas does the opposite. It runs
+a short adaptive diagnostic to locate the **exact boundary** of your knowledge, generates a
+personal curriculum that *begins at that boundary*, teaches each concept in the style you learn
+best, and **re‑routes the path after every quiz**. A Socratic tutor rides along the whole way,
+guiding with questions and never handing over the answer.
 
-```bash
-# 1. Install
-npm install
+It is **domain‑agnostic.** Python and Algebra ship as polished featured tracks, but type *any*
+subject (*"Music Theory", "Machine Learning", "Spanish grammar"*) and the entire path is
+generated live by LLM.
 
-# 2. Add your key
-cp .env.local.example .env.local      # then paste your key into ANTHROPIC_API_KEY
+---
 
-# 3. Start
-npm run dev                            # → http://localhost:3000
+## The adaptive loop
+
+```
+                ┌──────────────────────────────────────────────────┐
+                │                                                    │
+   ┌────────┐   ▼   ┌──────────┐   ┌────────────┐   ┌─────────┐   ┌─┴────────┐
+   │ ASSESS │─────▶ │ DIAGNOSE │──▶│ CURRICULUM │──▶│ LEARN   │──▶│ ADAPT    │
+   └────────┘       └──────────┘   └────────────┘   └─────────┘   └──────────┘
+   difficulty       known /         prereq concept    streaming     mastery + path
+   homes in on      frontier /      graph from your    lessons +     reorder after
+   your boundary    gaps            frontier           live quizzes  every answer
 ```
 
-> If port 3000 is taken, run `PORT=3939 npm run dev`.
-
-The key lives **server-side only** (`.env.local`) and is never shipped to the browser —
-every Claude call goes through a Next.js API route under `src/app/api/`.
-
----
-
-## 🧠 How the adaptivity actually works
-
-1. **Assessment** sends a running performance summary to `/api/assess`; the route computes a
-   target difficulty (climb on success, ease on failure) so questions home in on the boundary.
-2. **Diagnosis** (`/api/diagnose`) classifies concepts into *known / frontier / gaps* and
-   emits a first-guess learning-style weighting.
-3. **Curriculum** (`/api/curriculum`) returns a concept graph with `prereqs` + `knownAlready`
-   flags. The store turns this into live `Concept` objects (known ones start at 0.85 mastery).
-4. **`computeOrder()`** runs a *priority-aware topological sort*: it respects prerequisites but
-   floats the most urgent available concept to the front (weak > due-for-review > new > mastered).
-   It is recomputed after **every** lesson, quiz, and review — that's the adaptation.
-5. **Quizzes** update mastery via an exponential moving average and schedule the next spaced
-   review with an SM-2-style interval.
+Every quiz answer feeds `computeOrder()`, a **priority‑aware topological sort** that respects
+prerequisites while floating the most urgent concept (weak › due‑for‑review › new › mastered) to
+the front. That recompute, after every lesson, quiz, and review, *is* the adaptation.
 
 ---
 
-## ✅ Mapping to the assignment success metrics
+## What's inside
 
-| Success metric | How Atlas satisfies it |
+### The six core capabilities
+
+| | Capability | Lives in | What it does |
+|:--:|---|---|---|
+| 🎯 | **Knowledge assessment** | `Assessment.tsx` · `/api/assess` · `/api/diagnose` | Adaptive intake quiz. Difficulty climbs on a right answer and eases on a wrong one, homing in on your boundary. Ends in a precise *known / frontier / gaps* diagnosis. |
+| 🗺️ | **Curriculum generation** | `/api/curriculum` · `store.buildCurriculum` | Turns the diagnosis into a prerequisite‑ordered concept **graph** + modules, starting at your frontier. Two learners get demonstrably different paths. |
+| 📖 | **Interactive lessons** | `LessonView.tsx` · `/api/lesson` | Streaming lessons with explanations, analogies, code, and **inline practice questions** rendered as live widgets. |
+| 🔁 | **Adaptive progress** | `store.ts` (`recordQuiz`, `computeOrder`) | Per‑concept mastery (EMA); the path **reorders** after every quiz, so weak floats up, mastered drops, and prerequisites hold. |
+| 💬 | **Socratic tutor** | `Tutor.tsx` · `FloatingTutor.tsx` · `/api/tutor` | Guides one question at a time and **refuses to state the answer outright**. Reachable on every screen as a floating bubble. |
+| 📊 | **Progress dashboard** | `Dashboard.tsx` | Mastery rings, "where you stand", confidence calibration, spaced‑review stats, streak & XP, and a full session timeline, charted with Recharts. |
+
+### Going further
+
+- 📚 **Multi‑course enrollment:** learn several subjects at once. Each course keeps its own model, history, and mastery; the **`CourseSwitcher`** swaps the active one in a click (`CourseEntry`, `courses`, `switchCourse`, `deleteCourse`).
+- 🎚️ **Confidence calibration:** every answer carries a confidence rating; Atlas tracks whether you're over‑ or under‑confident and tells you.
+- 🧬 **Learning‑style adaptation:** a 5‑modality profile (analogy · visual · code · story · formal) is inferred from your assessment and the "explain it differently" buttons you reach for; lessons tune to it.
+- 🔄 **"Explain it differently":** re‑teach any concept through another modality, live (`/api/explain`).
+- 🧠 **Spaced repetition:** mastered concepts resurface on an SM‑2 forgetting curve in a dedicated **Review** mode.
+- 🗒️ **Notes & saved questions:** a sticky‑note workspace; star any quiz question and it's filed with its original context.
+- 🌗 **Light / dark theme:** one design system that flips cleanly, charts and all, with no flash on load.
+- 💾 **Persistent learner model:** everything saves to `localStorage`, so progress survives reloads.
+
+---
+
+## Quick start
+
+> **Prerequisites:** Node 18+ and an [Anthropic API key](https://console.anthropic.com).
+
+```bash
+npm install                            # 1 · install
+cp .env.local.example .env.local       # 2 · paste your key into ANTHROPIC_API_KEY
+npm run dev                            # 3 · run → http://localhost:3000
+```
+
+> Port 3000 taken? `PORT=3939 npm run dev`.
+
+The key stays **server‑side only**, so every Claude call goes through a Next.js route under
+`src/app/api/` and never reaches the browser.
+
+---
+
+## Routes
+
+The marketing landing page is the front door; the app lives behind it.
+
+| Path | |
 |---|---|
-| Assessment identifies gaps and generates a path that addresses them | Diagnosis → frontier/gaps → curriculum begins at the frontier and sequences the gaps. |
-| Two learners with different results get demonstrably different curricula | The whole graph is generated from each learner's unique diagnosis + goal. |
-| Socratic tutor guides without stating the answer | `tutorSystem` prompt + verified: asking "just tell me the answer" yields a guiding question, not the answer. |
-| Progress updates after each quiz and adjusts the remaining path | `recordQuiz` updates mastery and re-runs `computeOrder`; weak concepts move up the path. |
-| Dashboard reflects session history and mastery | Timeline of every event + per-concept mastery rings + the knowledge constellation. |
+| `/` | Marketing landing page *(served from `public/landing.html`; also at `/landing`)* |
+| `/start` | Onboarding: your courses + "add another", or pick a track / type any subject |
+| `/assess` | Adaptive diagnostic |
+| `/path` | Your charted curriculum (the knowledge map) |
+| `/learn/[lessonId]` | A streaming interactive lesson |
+| `/tutor` *· floating bubble* | Socratic tutor |
+| `/dashboard` | Progress dashboard |
+| `/review` | Spaced‑repetition review |
+| `/notes` | Sticky‑note workspace + starred questions |
 
 ---
 
-## 🗂️ Project structure
+## Under the hood
 
 ```
 src/
   app/
-    page.tsx              # view controller (onboarding → assessment → workspace)
-    layout.tsx            # fonts + metadata
-    globals.css           # the "field notebook" design system
-    api/                  # assess · diagnose · curriculum · lesson · quiz · tutor · explain
+    (app)/                # workspace: path · learn · tutor · dashboard · review · notes
+    start/                # onboarding + course management
+    assess/               # adaptive diagnostic
+    api/                  # assess · curriculum · diagnose · explain · lesson · quiz · tutor
+    layout.tsx            # fonts, theme bootstrap, providers, chrome
+    globals.css           # the design system (light/dark tokens)
   lib/
-    types.ts              # the learner model
-    anthropic.ts          # Claude client: structured() (forced tool-use) + streamText()
-    prompts.ts            # all system prompts + JSON schemas
-    store.ts              # Zustand store: mastery updates, path reordering, calibration
-    sr.ts                 # spaced-repetition + concept status
-    tracks.ts             # featured tracks
+    types.ts              # learner model + CourseEntry (multi-course)
+    anthropic.ts          # Claude client: structured() forced tool-use + streamText()
+    prompts.ts            # system prompts + JSON schemas
+    store.ts              # Zustand: mastery, path reorder, calibration, course switching
+    sr.ts                 # spaced repetition + concept status
+    tracks.ts             # featured tracks (Python, Algebra)
+    palette.ts            # theme-aware chart palette
+    useTheme.ts           # light/dark store
     useStream.ts          # streaming fetch hook
-  components/             # AppShell, Onboarding, Assessment, KnowledgeMap,
-                          # LessonView, Quiz, Tutor, Dashboard, ReviewSession, Markdown, ui
+  components/             # AppShell · Chrome · CourseSwitcher · Onboarding · Assessment
+                          # KnowledgeMap · LessonView · Quiz · Tutor · FloatingTutor
+                          # Dashboard · ReviewSession · Notes · NotePad · Streak · ThemeToggle
+public/
+  landing.html           # standalone marketing landing page (served at / and /landing)
 ```
 
-## 🛠️ Tech
-Next.js 15 (App Router ) · TypeScript · Tailwind CSS v4 · Framer Motion · Zustand ·
-the official `@anthropic-ai/sdk`, calling **`claude-opus-4-8`**.
-
-Structured outputs use **forced tool-use** (schema-guaranteed JSON); lessons and the tutor
-**stream** token-by-token for a live feel.
+**How a course is stored:** the *active* course lives in `model` + `history`; every other enrolled
+course is parked in `courses` (a `Record<string, CourseEntry>`) keyed by id. `switchCourse(id)`
+swaps the active one in and out, and no progress is ever lost.
 
 ---
 
-See **`LANDING_PROMPT.md`** for a ready-to-paste prompt to generate the marketing landing page.
+## Tech
+
+**Next.js 15** (App Router) · **React 19** · **TypeScript** · **Tailwind CSS v4** ·
+**Framer Motion** · **Zustand** · **Ant Design 5** · **Recharts** · the official
+**`@anthropic-ai/sdk`**, calling **`claude-sonnet-4-6`**.
+
+Structured outputs use **forced tool‑use** (schema‑guaranteed JSON); lessons and the tutor
+**stream** token‑by‑token for a live feel. Swap model tiers with the `ATLAS_MODEL` env var.
+
+---
+
+## Capabilities at a glance
+
+| What it handles | How |
+|---|---|
+| Identifies gaps and generates a path that addresses them | Diagnosis → frontier/gaps → curriculum begins at the frontier and sequences the gaps. |
+| Two different learners get demonstrably different curricula | The whole graph is generated from each learner's unique diagnosis + goal. |
+| Tutor guides without stating the answer | `tutorSystem` prompt: "just tell me the answer" yields a guiding question, not the answer. |
+| Progress updates after each quiz and adjusts the remaining path | `recordQuiz` updates mastery and re‑runs `computeOrder`; weak concepts move up. |
+| Dashboard reflects session history and mastery | Mastery rings, calibration, review stats, and a full session timeline. |
+
+---
+
+## Deploy
+
+```bash
+vercel                                       # preview
+vercel env add ANTHROPIC_API_KEY production  # required, or the AI routes 500
+vercel --prod                                # ship
+```
+
+Hosting is free on Vercel's Hobby plan; the only running cost is per‑use Claude API calls.
+Set a spend cap in the Anthropic Console to stay safe.
+
+---
+
+<div align="center">
+
+### Developed by
+
+[**@Manasvi-247**](https://github.com/Manasvi-247/) &nbsp;·&nbsp; [**@sanaa-duhh**](https://github.com/sanaa-duhh/) &nbsp;·&nbsp; [**@Posiedon207**](https://github.com/Posiedon207) &nbsp;·&nbsp; [**@Kesab2909**](https://github.com/Kesab2909)
+
+<sub>🧭 &nbsp; Atlas</sub>
+
+</div>
