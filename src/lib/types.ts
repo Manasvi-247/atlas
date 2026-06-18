@@ -191,6 +191,16 @@ export const MODALITY_LABELS: Record<Modality, string> = {
 
 // Raw shapes returned by the curriculum API route (before they're turned into
 // the live concept graph + lesson set in the store).
+// ── Multi-course ─────────────────────────────────────────────────────────────
+
+/** One enrolled course with its own full learner model + history. */
+export interface CourseEntry {
+  id: string;
+  model: LearnerModel;
+  history: HistoryEvent[];
+  createdAt: number;
+}
+
 export interface RawConcept {
   id: string;
   name: string;

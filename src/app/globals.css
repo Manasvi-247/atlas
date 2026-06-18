@@ -156,6 +156,57 @@ body::before {
   color: #fff;
 }
 
+/* ── Custom cursors — small soft rounded arrow, globally inherited ───────────
+   Smaller (22×32), pastel-light fills, thin stroke, 1px shadow offset.
+   Light mode: barely-there blush. Dark mode: soft teal. */
+
+html {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='32' viewBox='0 0 22 32'%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23f4c8e0' stroke='none' transform='translate(1,1)'/%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23fef5fb' stroke='%23f0c4e0' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, default;
+}
+html.dark {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='32' viewBox='0 0 22 32'%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%2380d8c8' stroke='none' transform='translate(1,1)'/%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23e8faf7' stroke='%23a8e4d8' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, default;
+}
+
+/* Pointer — slightly more saturated to signal clickability */
+a,
+button:not(:disabled),
+[role="button"],
+[role="link"],
+select,
+label,
+[tabindex]:not([tabindex="-1"]),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='32' viewBox='0 0 22 32'%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23eca8cc' stroke='none' transform='translate(1,1)'/%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23fde8f4' stroke='%23e8a0c8' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, pointer;
+}
+html.dark a,
+html.dark button:not(:disabled),
+html.dark [role="button"],
+html.dark [role="link"],
+html.dark select,
+html.dark label,
+html.dark [tabindex]:not([tabindex="-1"]),
+html.dark input[type="submit"]:not(:disabled),
+html.dark input[type="button"]:not(:disabled),
+html.dark input[type="checkbox"],
+html.dark input[type="radio"],
+html.dark input[type="range"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='32' viewBox='0 0 22 32'%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%2340c0a8' stroke='none' transform='translate(1,1)'/%3E%3Cpolygon points='2,2 2,22 7,17 12,27 15,25 10,15 17,15' fill='%23c8f4ec' stroke='%2368d0bc' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, pointer;
+}
+
+/* Keep text cursor for text inputs */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+textarea {
+  cursor: text;
+}
+
+button:disabled, input:disabled, [aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* Scrollbars that match the paper. */
 * {
   scrollbar-width: thin;
@@ -265,6 +316,22 @@ html.dark .atlas-card {
 }
 .float-in {
   animation: float-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* ── Add-another-course button gradients (dark-mode-aware) ─────────────────── */
+.add-course-btn {
+  background: linear-gradient(to right, #fde8f2, #ede8f8);
+  border-color: #f0ddf0;
+}
+html.dark .add-course-btn {
+  background: linear-gradient(to right, #0b1e2e, #0d2c3c);
+  border-color: #1a3a50;
+}
+.add-course-icon {
+  background: linear-gradient(135deg, #f5c6de, #c8b8e8);
+}
+html.dark .add-course-icon {
+  background: linear-gradient(135deg, #1a4a5e, #0d3044);
 }
 
 /* Prose styling for AI-rendered lesson markdown. */
