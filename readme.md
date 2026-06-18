@@ -108,7 +108,7 @@ src/
 ```
 
 ## 🛠️ Tech
-Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Zustand ·
+Next.js 15 (App Router ) · TypeScript · Tailwind CSS v4 · Framer Motion · Zustand ·
 the official `@anthropic-ai/sdk`, calling **`claude-opus-4-8`**.
 
 Structured outputs use **forced tool-use** (schema-guaranteed JSON); lessons and the tutor
