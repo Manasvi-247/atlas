@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type {
   Concept,
+  CourseEntry,
   Curriculum,
   Diagnosis,
   HistoryEvent,
@@ -105,8 +106,17 @@ export function computeOrder(concepts: Record<string, Concept>, now = Date.now()
 
 interface AtlasState {
   hydrated: boolean;
+
+  // ── Multi-course ────────────────────────────────────────────────────────────
+  /** All inactive courses keyed by id. The active course lives in model+history. */
+  courses: Record<string, CourseEntry>;
+  activeCourseId: string | null;
+
+  // ── Active course (source of truth) ────────────────────────────────────────
   model: LearnerModel;
   history: HistoryEvent[];
+
+  // ── Global (not per-course) ─────────────────────────────────────────────────
   notes: Note[];
   starred: StarredItem[];
 
@@ -128,6 +138,12 @@ interface AtlasState {
 
   nextLessonId: () => string | null;
   reset: () => void;
+
+  // ── Course management ───────────────────────────────────────────────────────
+  /** Returns every enrolled course (active course always has fresh model/history). */
+  getAllCourses: () => CourseEntry[];
+  switchCourse: (id: string) => void;
+  deleteCourse: (id: string) => void;
 }
 
 function bumpStreak(model: LearnerModel, now = Date.now()) {
@@ -145,12 +161,28 @@ export const useAtlas = create<AtlasState>()(
   persist(
     (set, get) => ({
       hydrated: false,
+      courses: {},
+      activeCourseId: null,
       model: emptyModel(),
       history: [],
       notes: [],
       starred: [],
 
-      setHydrated: () => set({ hydrated: true }),
+      setHydrated: () =>
+        set((s) => {
+          // Migration: old single-course format → create a course entry
+          if (s.model.subject && Object.keys(s.courses).length === 0 && !s.activeCourseId) {
+            const id = uid("course");
+            return {
+              hydrated: true,
+              courses: {
+                [id]: { id, model: s.model, history: s.history, createdAt: s.model.createdAt },
+              },
+              activeCourseId: id,
+            };
+          }
+          return { hydrated: true };
+        }),
 
       addNote: (text, context) =>
         set((s) => {
@@ -171,11 +203,23 @@ export const useAtlas = create<AtlasState>()(
       isStarred: (id) => get().starred.some((x) => x.id === id),
 
       startSubject: (subject, goal) =>
-        set(() => {
-          const model = emptyModel();
-          model.subject = subject;
-          model.goal = goal;
-          return { model, history: [] };
+        set((s) => {
+          const newId = uid("course");
+          const newModel = emptyModel();
+          newModel.subject = subject;
+          newModel.goal = goal;
+          // Snapshot the current active course before creating the new one
+          const updatedCourses = { ...s.courses };
+          if (s.activeCourseId) {
+            updatedCourses[s.activeCourseId] = {
+              id: s.activeCourseId,
+              model: s.model,
+              history: s.history,
+              createdAt: s.model.createdAt,
+            };
+          }
+          updatedCourses[newId] = { id: newId, model: newModel, history: [], createdAt: Date.now() };
+          return { courses: updatedCourses, activeCourseId: newId, model: newModel, history: [] };
         }),
 
       setDiagnosis: (d, styleHint) =>
@@ -414,7 +458,53 @@ export const useAtlas = create<AtlasState>()(
         return null;
       },
 
-      reset: () => set({ model: emptyModel(), history: [], notes: [], starred: [] }),
+      reset: () =>
+        set({ model: emptyModel(), history: [], notes: [], starred: [], courses: {}, activeCourseId: null }),
+
+      getAllCourses: () => {
+        const { courses, activeCourseId, model, history } = get();
+        const all: Record<string, CourseEntry> = { ...courses };
+        if (activeCourseId) {
+          all[activeCourseId] = { id: activeCourseId, model, history, createdAt: model.createdAt };
+        }
+        return Object.values(all).sort((a, b) => a.createdAt - b.createdAt);
+      },
+
+      switchCourse: (id) =>
+        set((s) => {
+          if (id === s.activeCourseId || !s.courses[id]) return {};
+          const updatedCourses = { ...s.courses };
+          // Save current active course
+          if (s.activeCourseId) {
+            updatedCourses[s.activeCourseId] = {
+              id: s.activeCourseId,
+              model: s.model,
+              history: s.history,
+              createdAt: s.model.createdAt,
+            };
+          }
+          const target = updatedCourses[id];
+          return {
+            courses: updatedCourses,
+            activeCourseId: id,
+            model: target.model,
+            history: target.history,
+          };
+        }),
+
+      deleteCourse: (id) =>
+        set((s) => {
+          const updatedCourses = { ...s.courses };
+          delete updatedCourses[id];
+          if (id !== s.activeCourseId) return { courses: updatedCourses };
+          // Deleting the active course — switch to the next available
+          const remaining = Object.values(updatedCourses);
+          if (remaining.length === 0) {
+            return { courses: {}, activeCourseId: null, model: emptyModel(), history: [] };
+          }
+          const next = remaining[0];
+          return { courses: updatedCourses, activeCourseId: next.id, model: next.model, history: next.history };
+        }),
     }),
     {
       name: "atlas-learner-v1",
